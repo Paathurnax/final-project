@@ -1,6 +1,6 @@
-// final thingy
-// Your Name
-// Date
+// Game Player
+// Jacob Koshman
+// January 31st, 2024
 //
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
