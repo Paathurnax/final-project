@@ -18,5 +18,9 @@ function setup() {
 function draw() {
   background(220);
   orbitControl();
+  push();
+  fill(150);
+  scale(0.1);
   model(asteroid);
+  pop();
 }
