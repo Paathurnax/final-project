@@ -5,12 +5,18 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
-let asteroid;
 const MAX_ASTEROIDS = 10;
 let asteroidArray = [];
+let positions;
+let posArray = [];
 
 function preload() {
-  asteroid = loadModel("asteroid.obj");
+  // for (let i = 0; i<MAX_ASTEROIDS; i++) {
+  //   let meteor = loadModel("asteroid.obj", true);
+  //   asteroidArray.push(meteor);
+  // }
+  let meteor = loadModel("asteroid.obj", true);
+  asteroidArray.push(meteor);
 }
 
 class Asteroid {
@@ -18,13 +24,10 @@ class Asteroid {
     this.x = x;
     this.y = y;
     this.rotYSpeed = frameCount*0.01;
-    this.meteor = asteroid;
   }
 
   display() {
-    for(let asteroid of asteroidArray) {
-      model(asteroid);
-    }
+    
   }
 
   rotate() {
@@ -35,13 +38,19 @@ class Asteroid {
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   angleMode(DEGREES);
+  for (let i = 0; i<MAX_ASTEROIDS; i+=1) {
+    posArray.push(createVector(random(-width/2, width/2), random(-height/2, height/2), random(-width/2, width/2)));
+  }
 }
 
 function draw() {
   background(220);
   orbitControl();
-  for (let i = 0; i<MAX_ASTEROIDS; i++) {
-    let someSpaceRock = new Asteroid;
-    asteroidArray.push(someSpaceRock);
+  scale(0.5);
+  for(let asteroid of asteroidArray) {
+    for (let i = 0; i<MAX_ASTEROIDS; i+=1) {
+      translate(posArray[i].x, posArray[i].y, posArray[i].z);
+      model(asteroid);
+    }
   }
 }
