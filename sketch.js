@@ -9,14 +9,10 @@ const MAX_ASTEROIDS = 10;
 let asteroidArray = [];
 let positions;
 let posArray = [];
+let meteor;
 
 function preload() {
-  // for (let i = 0; i<MAX_ASTEROIDS; i++) {
-  //   let meteor = loadModel("asteroid.obj", true);
-  //   asteroidArray.push(meteor);
-  // }
-  let meteor = loadModel("asteroid.obj", true);
-  asteroidArray.push(meteor);
+  meteor = loadModel("asteroid.obj", true);
 }
 
 class Asteroid {
@@ -47,10 +43,8 @@ function draw() {
   background(220);
   orbitControl();
   scale(0.5);
-  for(let asteroid of asteroidArray) {
-    for (let i = 0; i<MAX_ASTEROIDS; i+=1) {
-      translate(posArray[i].x, posArray[i].y, posArray[i].z);
-      model(asteroid);
-    }
+  for (let i = 0; i<MAX_ASTEROIDS; i+=1) {
+    translate(posArray[i].x, posArray[i].y, posArray[i].z);
+    model(meteor);
   }
 }
