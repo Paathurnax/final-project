@@ -6,44 +6,40 @@
 // - describe what you did to take this project "above and beyond"
 
 const MAX_ASTEROIDS = 10;
+const ASTEROID_SIZE = 50;
+const MOVE_SPEED = 5;
 let asteroidArray = [];
 let posArray = [];
 let spaceCoalition;
-let meteor;
 let space;
+let delay = 50;
 
 function preload() {
-  meteor = loadModel("asteroid.obj", true);
-  space = loadImage("space.gif")
+  space = loadImage("space.gif");
 }
 
 class AsteroidCreation {
   constuctor() {
-    // this.locationArray = [];
-    this.rotYSpeed = frameCount*0.01;
-    // this.startingRandomPosition = createVector(-width/4, random(-height/2, height/2), random(-width*0.75, width/2));
-    // this.endingRandomPosition = createVector(width, random(-height/2, height/2), random(-width*0.75, width/2));
+    this.speed = MOVE_SPEED;
   }
 
   generateLocations() {
     for (let i = 0; i<MAX_ASTEROIDS; i++) {
       if (i<5) {
-        posArray.push(createVector(-width/4, random(-height/2, height/2), random(-width*0.75, width/2)));
+        posArray.push(createVector(-width/4, random(-height/2, height/2), 0));
       }
       else {
-        posArray.push(createVector(width, random(-height/2, height/2), random(-width*0.75, width/2)));
+        posArray.push(createVector(width*0.99, random(-height/2, height/2), 0));
       }
     }
   }
   display() {
     for (let i = 0; i<MAX_ASTEROIDS; i++) {
-      translate(posArray[i].x, posArray[i].y, posArray[i].z);
-      model(meteor);
+      circle(posArray[i].x, posArray[i].y, ASTEROID_SIZE);
     }
   }
-
-  rotate() {
-    rotateY(this.rotYSpeed);
+  move() {
+    if 
   }
 }
 
@@ -52,33 +48,11 @@ function setup() {
   angleMode(DEGREES);
   spaceCoalition = new AsteroidCreation();
   spaceCoalition.generateLocations();
-  // for (let i = 0; i<MAX_ASTEROIDS; i++) {
-  //   if (i<5) {
-  //     posArray.push(createVector(-width/4, random(-height/2, height/2), random(-width*0.75, width/2)));
-  //   }
-  //   else {
-  //     posArray.push(createVector(width, random(-height/2, height/2), random(-width*0.75, width/2)));
-  //   }
-  // }
-  // makePerspective();
 }
 
 function draw() {
   background(220);
-  orbitControl();
   push();
-  scale(0.5);
   spaceCoalition.display();
-  spaceCoalition.rotate();
-  // for (let i = 0; i<MAX_ASTEROIDS; i++) {
-  //   translate(posArray[i].x, posArray[i].y, posArray[i].z);
-  //   model(meteor);
-  // }
   pop();
-}
-
-function makePerspective() {
-  let cam = createCamera();
-  cam.setPosition(width/2, height*0.75, 0);
-  cam.lookAt(0, height/2, 0);
 }
