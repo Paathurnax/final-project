@@ -14,45 +14,39 @@ let spaceCoalition;
 let space;
 let delay = 50;
 
-function preload() {
-  space = loadImage("space.gif");
-}
+// function preload() {
+//   space = loadImage("space.gif");
+// }
 
 class AsteroidCreation {
-  constuctor() {
+  constuctor(y, distance) {
     this.speed = MOVE_SPEED;
+    this.asteroidDist = distance;
+    this.y = y;
   }
 
-  generateLocations() {
-    for (let i = 0; i<MAX_ASTEROIDS; i++) {
-      if (i<5) {
-        posArray.push(createVector(-width/4, random(-height/2, height/2), 0));
-      }
-      else {
-        posArray.push(createVector(width*0.99, random(-height/2, height/2), 0));
-      }
-    }
-  }
   display() {
     for (let i = 0; i<MAX_ASTEROIDS; i++) {
-      circle(posArray[i].x, posArray[i].y, ASTEROID_SIZE);
+      circle(ASTEROID_SIZE, this.y, ASTEROID_SIZE);
+      this.y -= this.asteroidDist;
     }
   }
-  move() {
-    if 
-  }
+  // move() {
+  //   if (frameCount%delay === 0) {
+  //     for (let i = 0; i<MAX_ASTEROIDS; i++) {
+  //       posArray[i]
+  //     }
+  //   }
+  // }
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   angleMode(DEGREES);
-  spaceCoalition = new AsteroidCreation();
-  spaceCoalition.generateLocations();
+  spaceCoalition = new AsteroidCreation(height, height/MAX_ASTEROIDS);
 }
 
 function draw() {
   background(220);
-  push();
   spaceCoalition.display();
-  pop();
 }
