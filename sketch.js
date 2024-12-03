@@ -14,7 +14,6 @@ let moveDelay = 50;
 let creationDelay = 1000;
 let x;
 let isDead = false;
-let clickCount = 0;
 
 class Create {
   constructor() {
@@ -22,6 +21,7 @@ class Create {
     this.y = height;
     this.distBetween = asteroidDist;
     this.isDead = false;
+    this.clickCount = 0;
   }
 
   createAsteroid() {
@@ -39,8 +39,13 @@ class Create {
     }
   }
 
+  clickCounter() {
+    if (mouseIsPressed && mouseX === this.x && mouseY===this.y) {
+      this.clickCount++;
+    }
+  }
   dead() {
-    if (clickCount === 3) {
+    if (this.clickCount === 3) {
       this.isDead = true;
     }
     else {
@@ -67,13 +72,6 @@ function draw() {
     spaceRock.moveAsteroid();
     spaceRock.dead();
   }
-  if (clickCount>3){
-    clickCount === 0;
-  }
-}
-
-function mousePressed() {
-  clickCount++;
 }
 
 // function createAsteroids() {
