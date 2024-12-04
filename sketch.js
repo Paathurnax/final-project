@@ -13,77 +13,82 @@ let asteroidDist;
 let moveDelay = 50;
 let creationDelay = 1000;
 let x;
+let y;
+let clickCount = 0;
 let isDead = false;
 
-class Create {
-  constructor() {
-    this.x = -width/2;
-    this.y = height;
-    this.distBetween = asteroidDist;
-    this.isDead = false;
-    this.clickCount = 0;
-  }
+// class Create {
+//   constructor(x, y) {
+//     this.x = x;
+//     this.y = y;
+//     this.isDead = false;
+//   }
 
-  createAsteroid() {
-    if (!this.isDead) {
-      circle(this.x, this.y, ASTEROID_SIZE/2);
-      if (this.y > 0) {
-        this.y -= this.distBetween;
-      }
-    }
-  }
+//   createAsteroid() {
+//     if (!this.isDead) {
+//       circle(this.x, this.y, ASTEROID_SIZE/2);
+//     }
+//   }
 
-  moveAsteroid() {
-    if (this.x<width && frameCount%moveDelay === 0) {
-      this.x += random(10, 50);
-    }
-  }
+//   moveAsteroid() {
+//     if (this.x<width && frameCount%moveDelay === 0) {
+//       this.x += random(10, 50);
+//     }
+//   }
 
-  clickCounter() {
-    if (mouseIsPressed && mouseX === this.x && mouseY===this.y) {
-      this.clickCount++;
-    }
-  }
-  dead() {
-    if (this.clickCount === 3) {
-      this.isDead = true;
-    }
-    else {
-      this.isDead = false;
-    }
-  }
-}
+//   dead() {
+//     if (clickCount === 3) {
+//       this.isDead = true;
+//     }
+//     else {
+//       this.isDead = false;
+//     }
+//   }
+// }
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   angleMode(DEGREES);
   asteroidDist = height/MAX_ASTEROIDS;
-  x = -width/2;
-  for (let i = 0; i<MAX_ASTEROIDS; i++) {
-    let meteor = new Create();
-    asteroidArray.push(meteor);
-  }
 }
 
 function draw() {
   background(220);
-  for (let spaceRock of asteroidArray) {
-    spaceRock.createAsteroid();
-    spaceRock.moveAsteroid();
-    spaceRock.dead();
+  createAsteroids();
+  moveAsteroids();
+  dead();
+}
+
+function mousePressed() {
+  if (dist(mouseX, mouseY, x, y) <= ASTEROID_SIZE) {
+    clickCount++;
   }
 }
 
-// function createAsteroids() {
-//   let y = height/3;
-//   for (let i = 0; i<MAX_ASTEROIDS; i++) {
-//     circle(x, y, ASTEROID_SIZE/2);
-//     y -= asteroidDist;
-//   }
-// }
+function createAsteroids() {
+  let offsetX = 0;
+  let offsetY = 0;
+  offsetX += random(ASTEROID_SIZE, ASTEROID_SIZE*2);
+  offsetY += random(ASTEROID_SIZE, ASTEROID_SIZE*2);
+  for (let i = 0; i<MAX_ASTEROIDS; i++) {
+    let y = 100*noise(0.010*frameCount + 10000);
+    let x = 100*noise(0.010*frameCount);
+    circle(x+offsetX, y+offsetY, ASTEROID_SIZE/2);
+  }
+}
 
-// function moveAsteroids() {
-//   if (x<width && frameCount%moveDelay === 0) {
-//     x += random(10, 50);
-//   }
-// }
+function moveAsteroids() {
+  if (x<width && frameCount%moveDelay === 0) {
+    x += random(10, 50);
+  }  
+} 
+ 
+
+function dead() {
+  if (clickCount === 3) {
+    isDead = true;
+  }
+  else {
+    isDead = false;
+  }
+}
