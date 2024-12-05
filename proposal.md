@@ -2,11 +2,11 @@
 - i plan to make a program that lets the user pick between multiple games. Kind of like a very small scale cool math games.
 
 ## Needs To Have
-- at least 3 different games
-- good looking ui
-- easy to play games
-- 2d and 3d games
+- asteroids, snake, space invaders
+- non-complex games that dont require to much skill to play
+- a visually appealing ui that uses simple shapes and smooth features
 
 ## Nice To Have
-- multiplayer games
-- 6 or more games
+- games that require more than one player
+- tetris, pong, chess
+- controller/mobile support
