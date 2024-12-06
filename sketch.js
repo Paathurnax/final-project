@@ -7,13 +7,17 @@
 
 const ROT_ANGLE = 0.1;
 const FORCE_DIVIDER = 0.5;
-const MAX_ASTEROIDS = 100;
+const MAX_ASTEROIDS = 25;
 const VEL_MULTI = 2.5;
 const DRAG = 0.99;
-const MIN_SIZE = 5;
+const ASTEROID_SIZE = 25;
+let minSize = ASTEROID_SIZE/5;
 let ship;
 let asteroids = [];
 let lasers = [];
+let gameOver;
+let invulnurable = false;
+let answer;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -25,12 +29,11 @@ function setup() {
 
 function draw() {
   background(220);
-  
-  
-  
-  laserStuff();
-  asteroidStuff();
-  shipFunctions();
+  if (!gameOver) {
+    laserStuff();
+    asteroidStuff();
+    shipFunctions();
+  }
 }
 
 function mousePressed() {
@@ -47,6 +50,19 @@ function keyPressed() {
   else if(keyIsDown(87)) {
     ship.boosting = true;
     ship.boost();
+  }
+  else if(keyIsDown(192)) {
+    answer = prompt("command console");
+    if (answer === "IDDQD") {
+      invulnurable = true;
+    }
+    else if (answer === "IDKFA") {
+      minSize = ASTEROID_SIZE;
+    }
+    else {
+      invulnurable = false;
+      infDmg = false;
+    }
   }
 }
 
@@ -72,7 +88,7 @@ function laserStuff() {
     else{     
       for (let j = asteroids.length-1; j>=0; j--) {
         if (lasers[i].hits(asteroids[j])) {
-          if (asteroids[j].size > MIN_SIZE) {
+          if (asteroids[j].size >= minSize) {
             let newAsteroids = asteroids[j].breakApart();       
             asteroids = asteroids.concat(newAsteroids);
           }
@@ -88,7 +104,7 @@ function laserStuff() {
 function asteroidStuff() {
   for (let i = 0; i<asteroids.length; i++) {
     if (ship.hits(asteroids[i])) {
-      console.log("oops");
+      gameOver = true;
     }
     asteroids[i].render();
     asteroids[i].update();
@@ -155,8 +171,10 @@ class Ship {
   }
   
   hits(asteroid) {
-    let distance = dist(this.pos.x, this.pos.y, asteroid.pos.x, asteroid.pos.y);
-    return distance<this.size+asteroid.size;
+    if(!invulnurable) {
+      let distance = dist(this.pos.x, this.pos.y, asteroid.pos.x, asteroid.pos.y);
+      return distance<this.size+asteroid.size;
+    }
   }
 }
 
@@ -173,7 +191,7 @@ class Asteroid {
       this.size = size/2;
     }
     else {
-      this.size = random(5, 25);
+      this.size = 25;
     }
     this.velocity = p5.Vector.random2D();
     this.vertexAmount = floor(random(5, 15));
