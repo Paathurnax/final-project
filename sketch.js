@@ -6,9 +6,9 @@
 // - describe what you did to take this project "above and beyond"
 
 const ROT_ANGLE = 0.1;
-const FORCE_DIVIDER = 0.5;
+const FORCE_DIVIDER = 0.7;
 const MAX_ASTEROIDS = 25;
-const VEL_MULTI = 2.5;
+const VEL_MULTI = 5;
 const DRAG = 0.99;
 const ASTEROID_SIZE = 25;
 let minSize = ASTEROID_SIZE/5;
@@ -18,6 +18,7 @@ let lasers = [];
 let gameOver;
 let invulnurable = false;
 let answer;
+let score = 0;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -33,6 +34,12 @@ function draw() {
     laserStuff();
     asteroidStuff();
     shipFunctions();
+    text(score, width+10, 10);
+  }
+  else {
+    text("you lose!", width/2, height/2);
+    textSize(100);
+    textAlign(CENTER);
   }
 }
 
@@ -57,7 +64,7 @@ function keyPressed() {
       invulnurable = true;
     }
     else if (answer === "IDKFA") {
-      minSize = ASTEROID_SIZE;
+      minSize = ASTEROID_SIZE*2;
     }
     else {
       invulnurable = false;
@@ -91,6 +98,7 @@ function laserStuff() {
           if (asteroids[j].size >= minSize) {
             let newAsteroids = asteroids[j].breakApart();       
             asteroids = asteroids.concat(newAsteroids);
+            score++;
           }
           asteroids.splice(j, 1);
           lasers.splice(i, 1);
