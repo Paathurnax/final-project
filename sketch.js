@@ -16,6 +16,7 @@ let ship;
 let asteroids = [];
 let lasers = [];
 let gameOver;
+let youWon;
 let invulnurable = false;
 let answer;
 let score = 0;
@@ -30,14 +31,23 @@ function setup() {
 
 function draw() {
   background(220);
-  if (!gameOver) {
+  if (!gameOver && !youWon) {
     laserStuff();
     asteroidStuff();
     shipFunctions();
-    text(score, width+10, 10);
+    textSize(50);
+    text(score, width-50, 50);
+    if (score === MAX_ASTEROIDS*minSize) {
+      youWon = true;
+    }
+  }
+  else if (gameOver) {
+    text("you lose!", width/2, height/2);
+    textSize(100);
+    textAlign(CENTER);
   }
   else {
-    text("you lose!", width/2, height/2);
+    text("you win!", width/2, height/2);
     textSize(100);
     textAlign(CENTER);
   }
@@ -63,12 +73,14 @@ function keyPressed() {
     if (answer === "IDDQD") {
       invulnurable = true;
     }
-    else if (answer === "IDKFA") {
-      minSize = ASTEROID_SIZE*2;
+    else if (answer === "AUTOWIN") {
+      youWon = true;
+    }
+    else if (answer === "AUTOLOSE") {
+      gameOver = true;
     }
     else {
-      invulnurable = false;
-      infDmg = false;
+      alert("Not A CheatCode");
     }
   }
 }
@@ -95,10 +107,10 @@ function laserStuff() {
     else{     
       for (let j = asteroids.length-1; j>=0; j--) {
         if (lasers[i].hits(asteroids[j])) {
+          score++;
           if (asteroids[j].size >= minSize) {
             let newAsteroids = asteroids[j].breakApart();       
             asteroids = asteroids.concat(newAsteroids);
-            score++;
           }
           asteroids.splice(j, 1);
           lasers.splice(i, 1);
