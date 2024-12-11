@@ -59,10 +59,10 @@ function mousePressed() {
 
 function keyPressed() {
   if (keyIsDown(65)) {
-    ship.setRotation(0.1);
+    ship.setRotation(-0.1);
   } 
   else if (keyIsDown(68)) {
-    ship.setRotation(-0.1);
+    ship.setRotation(0.1);
   }
   else if(keyIsDown(87)) {
     ship.boosting = true;
@@ -140,6 +140,8 @@ class Ship {
     this.heading = 0;
     this.velocity = createVector(0, 0);
     this.boosting = false;
+    this.spawnTimer = 120;
+    this.withinSpawnTimer = true;
   }
   
   render() {
@@ -193,7 +195,7 @@ class Ship {
   hits(asteroid) {
     if(!invulnurable) {
       let distance = dist(this.pos.x, this.pos.y, asteroid.pos.x, asteroid.pos.y);
-      return distance<this.size+asteroid.size;
+      return distance<this.size+asteroid.size*1.5;
     }
   }
 }
@@ -286,7 +288,7 @@ class Laser {
   
   hits(asteroid) {
     let distance = dist(this.pos.x, this.pos.y, asteroid.pos.x, asteroid.pos.y);
-    return distance<asteroid.size;
+    return distance<asteroid.size*1.5;
   }
   
   offScreen() {
