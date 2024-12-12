@@ -11,7 +11,8 @@ const MAX_ASTEROIDS = 25;
 const VEL_MULTI = 5;
 const DRAG = 0.99;
 const ASTEROID_SIZE = 25;
-let minSize = ASTEROID_SIZE/5;
+const MIN_DIVISER = 5;
+let minSize = ASTEROID_SIZE/MIN_DIVISER;
 let ship;
 let asteroids = [];
 let lasers = [];
@@ -36,8 +37,8 @@ function draw() {
     asteroidStuff();
     shipFunctions();
     textSize(50);
-    text(score, width-50, 50);
-    if (score === MAX_ASTEROIDS*minSize) {
+    text(score, width-100, 50);
+    if (score === MAX_ASTEROIDS*MIN_DIVISER*3) {
       youWon = true;
     }
   }
@@ -108,7 +109,7 @@ function laserStuff() {
       for (let j = asteroids.length-1; j>=0; j--) {
         if (lasers[i].hits(asteroids[j])) {
           score++;
-          if (asteroids[j].size >= minSize) {
+          if (asteroids[j].size > minSize) {
             let newAsteroids = asteroids[j].breakApart();       
             asteroids = asteroids.concat(newAsteroids);
           }
