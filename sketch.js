@@ -21,6 +21,7 @@ let youWon;
 let invulnurable = false;
 let answer;
 let score = 0;
+let state = "start";
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -32,25 +33,28 @@ function setup() {
 
 function draw() {
   background(220);
-  if (!gameOver && !youWon) {
-    laserStuff();
-    asteroidStuff();
-    shipFunctions();
-    textSize(50);
-    text(score, width-100, 50);
-    if (score === MAX_ASTEROIDS*MIN_DIVISER*3) {
-      youWon = true;
+  stateStuff();
+  if (state === "asteroids") {
+    if (!gameOver && !youWon) {
+      laserStuff();
+      asteroidStuff();
+      shipFunctions();
+      textSize(50);
+      text(score, width-100, 50);
+      if (score === MAX_ASTEROIDS*MIN_DIVISER*3) {
+        youWon = true;
+      }
     }
-  }
-  else if (gameOver) {
-    text("you lose!", width/2, height/2);
-    textSize(100);
-    textAlign(CENTER);
-  }
-  else {
-    text("you win!", width/2, height/2);
-    textSize(100);
-    textAlign(CENTER);
+    else if (gameOver) {
+      text("you lose!", width/2, height/2);
+      textSize(100);
+      textAlign(CENTER);
+    }
+    else {
+      text("you win!", width/2, height/2);
+      textSize(100);
+      textAlign(CENTER);
+    }
   }
 }
 
@@ -89,6 +93,18 @@ function keyPressed() {
 function keyReleased() {
   ship.setRotation(0);
   ship.boosting = false;
+}
+
+function stateStuff() {
+  if (state === "start") {
+    background(0);
+    push();
+    fill(255);
+    textSize(100);
+    text("ASTEROIDS", 0, 0);
+    textAlign();
+    pop();
+  }
 }
 
 function shipFunctions() {
