@@ -22,6 +22,7 @@ let invulnurable = false;
 let answer;
 let score = 0;
 let state = "start";
+let textOffset = 200;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -29,33 +30,12 @@ function setup() {
   for (let i = 0; i<MAX_ASTEROIDS; i++) {
     asteroids.push(new Asteroid());
   }
+  createStartButton();
 }
 
 function draw() {
   background(220);
   stateStuff();
-  if (state === "asteroids") {
-    if (!gameOver && !youWon) {
-      laserStuff();
-      asteroidStuff();
-      shipFunctions();
-      textSize(50);
-      text(score, width-100, 50);
-      if (score === MAX_ASTEROIDS*MIN_DIVISER*3) {
-        youWon = true;
-      }
-    }
-    else if (gameOver) {
-      text("you lose!", width/2, height/2);
-      textSize(100);
-      textAlign(CENTER);
-    }
-    else {
-      text("you win!", width/2, height/2);
-      textSize(100);
-      textAlign(CENTER);
-    }
-  }
 }
 
 function mousePressed() {
@@ -101,12 +81,46 @@ function stateStuff() {
     push();
     fill(255);
     textSize(100);
-    text("ASTEROIDS", 0, 0);
-    textAlign();
+    textWidth(textOffset*2);
+    text("ASTEROIDS", width/2-textOffset*1.5, height-textOffset*2.5);
+    button.show();
     pop();
+  }
+  else if (state === "asteroids") {
+    if (!gameOver && !youWon) {
+      laserStuff();
+      asteroidStuff();
+      shipFunctions();
+      textSize(50);
+      text(score, width-100, 50);
+      if (score === MAX_ASTEROIDS*MIN_DIVISER*3) {
+        youWon = true;
+      }
+    }
+    else if (gameOver) {
+      text("you lose!", width/2, height/2);
+      textSize(100);
+      textAlign(CENTER);
+    }
+    else {
+      text("you win!", width/2, height/2);
+      textSize(100);
+      textAlign(CENTER);
+    }
   }
 }
 
+function createStartButton() {
+  button = createButton("Start");
+  button.mouseClicked(changeState);
+  button.size(100);
+  button.center();
+}
+
+function changeState() {
+  state = "asteroids";
+  button.hide();
+}
 function shipFunctions() {
   ship.render();
   ship.turn();
