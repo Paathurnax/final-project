@@ -92,6 +92,7 @@ function stateStuff() {
       asteroidStuff();
       shipFunctions();
       textSize(50);
+      button.hide();
       text(score, width-100, 50);
       if (score === MAX_ASTEROIDS*MIN_DIVISER*3) {
         youWon = true;
@@ -119,7 +120,6 @@ function createStartButton() {
 
 function changeState() {
   state = "asteroids";
-  button.hide();
 }
 function shipFunctions() {
   ship.render();
@@ -171,8 +171,6 @@ class Ship {
     this.heading = 0;
     this.velocity = createVector(0, 0);
     this.boosting = false;
-    this.spawnTimer = 120;
-    this.withinSpawnTimer = true;
   }
   
   render() {
@@ -224,7 +222,7 @@ class Ship {
   }
   
   hits(asteroid) {
-    if(!invulnurable) {
+    if(!invulnurable && frameCount>300) {
       let distance = dist(this.pos.x, this.pos.y, asteroid.pos.x, asteroid.pos.y);
       return distance<this.size+asteroid.size*1.5;
     }
