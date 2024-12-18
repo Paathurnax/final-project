@@ -44,10 +44,10 @@ function mousePressed() {
 
 function keyPressed() {
   if (keyIsDown(65)) {
-    ship.setRotation(-0.1);
+    ship.setRotation(-0.2);
   } 
   else if (keyIsDown(68)) {
-    ship.setRotation(0.1);
+    ship.setRotation(0.2);
   }
   else if(keyIsDown(87)) {
     ship.boosting = true;
