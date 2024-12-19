@@ -10,6 +10,7 @@ let buttonOffset = 25;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  superStateStuff();
 }
 
 function draw() {
@@ -17,17 +18,21 @@ function draw() {
 }
 
 function createGameButtons() {
-  button = createButton();
-  button2 = createButton();
-  button3 = createButton();
+  button1 = createButton("Asteroids");
+  button2 = createButton("Snake");
+  button3 = createButton("Space Invaders");
 
-  button.position(width/2-buttonOffset, height/2);
-  button2.positon(width/2, height/2);
+  button1.position(width/2-buttonOffset, height/2);
+  button2.position(width/2, height/2);
   button3.position(width/2+buttonOffset, height/2);
 
-  button.mousePressed(startAsteroids);
+  button1.mousePressed(startAsteroids);
   button2.mousePressed(startSnake);
   button3.mousePressed(startSpaceInvaders);
+
+  button1.draggable();
+  button2.draggable();
+  button3.draggable();
 }
 
 function startAsteroids() {
