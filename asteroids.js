@@ -16,27 +16,22 @@ let youWon;
 let invulnurable = false;
 let answer;
 let score = 0;
-let state;
+let asteroidsState;
 let textOffset = 200;
 
-function setup() {
-  createCanvas(windowWidth, windowHeight);
-  ship = new Ship();
-  for (let i = 0; i<MAX_ASTEROIDS; i++) {
-    asteroids.push(new Asteroid());
-  }
-  createStartButton();
-}
+// function setup() {
+//   createCanvas(windowWidth, windowHeight);
+// }
 
-function draw() {
-  background(220);
-  if (superState === "asteroids") {
-    stateStuff();
-  }
-  else {
-    button.hide();
-  }
-}
+// function draw() {
+//   background(220);
+//   if (superState === "asteroids") {
+//     stateStuff();
+//   }
+//   else {
+//     button.hide();
+//   }
+// }
 
 function mousePressed() {
   lasers.push(new Laser(ship.pos, ship.heading));
@@ -76,7 +71,7 @@ function keyReleased() {
 }
 
 function stateStuff() {
-  if (state === "start") {
+  if (asteroidsState === "start") {
     background(0);
     push();
     fill(255);
@@ -86,7 +81,7 @@ function stateStuff() {
     button.show();
     pop();
   }
-  else if (state === "asteroids") {
+  else if (asteroidsState === "asteroids") {
     if (!gameOver && !youWon) {
       laserStuff();
       asteroidStuff();
@@ -119,7 +114,7 @@ function createStartButton() {
 }
 
 function changeState() {
-  state = "asteroids";
+  asteroidsState = "asteroids";
 }
 function shipFunctions() {
   ship.render();

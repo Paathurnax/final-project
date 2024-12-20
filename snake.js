@@ -3,14 +3,11 @@
 let grid;
 const SQUARESIZE = 50;
 
-function setup() {
-  createCanvas(windowWidth, windowHeight);
-  grid = new Grid(windowWidth, windowHeight);
-}
-
-function draw() {
-  grid.createGrid();
-}
+// function setup() {
+//   createCanvas(windowWidth, windowHeight);
+// }
+// function draw() {
+// }
 
 class Grid {
   constructor(width, height) {

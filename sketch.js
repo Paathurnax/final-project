@@ -10,11 +10,16 @@ let buttonOffset = 25;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  superStateStuff();
+  grid = new Grid(windowWidth, windowHeight);
+  ship = new Ship();
+  for (let i = 0; i<MAX_ASTEROIDS; i++) {
+    asteroids.push(new Asteroid());
+  }
 }
 
 function draw() {
   background(220);
+  superStateStuff();
 }
 
 function createGameButtons() {
@@ -50,14 +55,21 @@ function startSpaceInvaders() {
 function superStateStuff() {
   if (superState === "start") {
     createGameButtons();
-    button.show();
+    button1.show();
     button2.show();
     button3.show();
+    button.hide();
   }
   else if (superState === "asteroids") {
+    createStartButton();
     stateStuff();
-    button.hide();
+    asteroidsState = "start";
+    button1.hide();
     button2.hide();
     button3.hide();
+    button.show();
+  }
+  else if (superState === "snake") {
+    grid.createGrid();
   }
 }
