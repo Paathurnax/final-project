@@ -1,5 +1,5 @@
 //asteroids
-
+ 
 const ROT_ANGLE = 0.1;
 const FORCE_DIVIDER = 0.7;
 const MAX_ASTEROIDS = 25;
@@ -16,8 +16,9 @@ let youWon;
 let invulnurable = false;
 let answer;
 let score = 0;
-let asteroidsState;
+let asteroidsState = "start";
 let textOffset = 200;
+let asteroidsStartButton;
 
 // function setup() {
 //   createCanvas(windowWidth, windowHeight);
@@ -33,43 +34,6 @@ let textOffset = 200;
 //   }
 // }
 
-function mousePressed() {
-  lasers.push(new Laser(ship.pos, ship.heading));
-}
-
-function keyPressed() {
-  if (keyIsDown(65)) {
-    ship.setRotation(-0.2);
-  } 
-  else if (keyIsDown(68)) {
-    ship.setRotation(0.2);
-  }
-  else if(keyIsDown(87)) {
-    ship.boosting = true;
-    ship.boost();
-  }
-  else if(keyIsDown(192)) {
-    answer = prompt("command console");
-    if (answer === "IDDQD") {
-      invulnurable = true;
-    }
-    else if (answer === "AUTOWIN") {
-      youWon = true;
-    }
-    else if (answer === "AUTOLOSE") {
-      gameOver = true;
-    }
-    else {
-      alert("Not A CheatCode");
-    }
-  }
-}
-
-function keyReleased() {
-  ship.setRotation(0);
-  ship.boosting = false;
-}
-
 function stateStuff() {
   if (asteroidsState === "start") {
     background(0);
@@ -78,7 +42,7 @@ function stateStuff() {
     textSize(100);
     textWidth(textOffset*2);
     text("ASTEROIDS", width/2-textOffset*1.5, height-textOffset*2.5);
-    button.show();
+    asteroidsStartButton.show();
     pop();
   }
   else if (asteroidsState === "asteroids") {
@@ -87,7 +51,7 @@ function stateStuff() {
       asteroidStuff();
       shipFunctions();
       textSize(50);
-      button.hide();
+      asteroidsStartButton.hide();
       text(score, width-100, 50);
       if (score === MAX_ASTEROIDS*MIN_DIVISER*3) {
         youWon = true;
@@ -107,10 +71,10 @@ function stateStuff() {
 }
 
 function createStartButton() {
-  button = createButton("Start");
-  button.mouseClicked(changeState);
-  button.size(100);
-  button.center();
+  asteroidsStartButton = createButton("Start");
+  asteroidsStartButton.mouseClicked(changeState);
+  asteroidsStartButton.size(100);
+  asteroidsStartButton.center();
 }
 
 function changeState() {

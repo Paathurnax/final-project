@@ -1,46 +1,52 @@
 //snake
 
-let grid;
-const SQUARESIZE = 50;
-
-// function setup() {
-//   createCanvas(windowWidth, windowHeight);
-// }
-// function draw() {
-// }
+const GRID_SIZE = 100;
 
 class Grid {
-  constructor(width, height) {
-    this.width = width;
-    this.height = height;
-    this.size = width/SQUARESIZE;
-    this.gridArray = [];
-    this.color = "green";
-  }
-
-  createGrid() {
-    for (let x = 0; x<this.size; x++) {
-      this.gridArray[x] = [];
-      for (let y = 0; y<this.size; y++) {
-        this.gridArray[x][y] = this.color;
-      }
-    }
-    this.displayGrid();
+  constructor() {
   }
 
   displayGrid() {
-    for (let x = 0; x<this.size; x++) {
-      for (let y = 0; y<this.size; y++) {
-        if (this.gridArray[x][y] === this.color) {
-          fill(this.color);
-        }
-
-        else {
-          console.error("how did that happen?");
-        }
-
-        square(x*SQUARESIZE, y*SQUARESIZE, SQUARESIZE);
+    for (let x = 0; x< width; x+= width/GRID_SIZE) {
+      for (let y = 0; y <height; y += height / GRID_SIZE) {
+        stroke(0);
+        strokeWeight(1);
+        line(x, 0, x, height);
+        line(0, y, width, y);
       }
+    }
+  }
+}
+
+class Snake {
+  constructor() {
+    this.bodyArray = [];
+    this.bodyArray.push({x: width/2, y: height/2});
+    this.direction = "right";
+  }
+
+  makeSnake() {
+    fill("blue");
+    for (let bodyPart of this.bodyArray) {
+      rect(bodyPart.x, bodyPart.y, width/GRID_SIZE, height/GRID_SIZE);
+    }
+  }
+
+  updateSnake() {
+    if (this.direction === "right") {
+      this.bodyArray[0].x += width/GRID_SIZE/15;
+    }
+
+    else if (this.direction === "down") {
+      this.bodyArray[0].y += height/GRID_SIZE/15;
+    }
+
+    else if (this.direction === "left") {
+      this.bodyArray[0].x -= width/GRID_SIZE/15;
+    }
+
+    else if (this.direction === "up") {
+      this.bodyArray[0].y -= height/GRID_SIZE/15;
     }
   }
 }

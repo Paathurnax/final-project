@@ -6,15 +6,23 @@
 // - describe what you did to take this project "above and beyond"
 
 let superState = "start";
-let buttonOffset = 25;
+let buttonOffset = 30;
+let buttonSize = buttonOffset*4;
+
+function preload() {
+  grass = loadImage("grass.png");
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  grid = new Grid(windowWidth, windowHeight);
+  grid = new Grid();
+  snake = new Snake();
   ship = new Ship();
   for (let i = 0; i<MAX_ASTEROIDS; i++) {
     asteroids.push(new Asteroid());
   }
+  createGameButtons();
+  createStartButton();
 }
 
 function draw() {
@@ -23,22 +31,23 @@ function draw() {
 }
 
 function createGameButtons() {
-  button1 = createButton("Asteroids");
-  button2 = createButton("Snake");
-  button3 = createButton("Space Invaders");
+  asteroidsButton = createButton("Asteroids");
+  snakeButton = createButton("Snake");
+  spaceInvadersButton = createButton("Space Invaders");
 
-  button1.position(width/2-buttonOffset, height/2);
-  button2.position(width/2, height/2);
-  button3.position(width/2+buttonOffset, height/2);
+  asteroidsButton.position(width/2-buttonOffset*4, height/2);
+  snakeButton.position(width/2, height/2);
+  spaceInvadersButton.position(width/2+buttonOffset*4, height/2);
 
-  button1.mousePressed(startAsteroids);
-  button2.mousePressed(startSnake);
-  button3.mousePressed(startSpaceInvaders);
+  asteroidsButton.mousePressed(startAsteroids);
+  snakeButton.mousePressed(startSnake);
+  spaceInvadersButton.mousePressed(startSpaceInvaders);
 
-  button1.draggable();
-  button2.draggable();
-  button3.draggable();
+  asteroidsButton.size(buttonSize, buttonOffset);
+  snakeButton.size(buttonSize, buttonOffset);
+  spaceInvadersButton.size(buttonSize, buttonOffset);
 }
+
 
 function startAsteroids() {
   superState = "asteroids";
@@ -54,22 +63,86 @@ function startSpaceInvaders() {
 
 function superStateStuff() {
   if (superState === "start") {
-    createGameButtons();
-    button1.show();
-    button2.show();
-    button3.show();
-    button.hide();
+    asteroidsButton.show();
+    snakeButton.show();
+    spaceInvadersButton.show();
+    asteroidsStartButton.hide();
   }
   else if (superState === "asteroids") {
-    createStartButton();
     stateStuff();
-    asteroidsState = "start";
-    button1.hide();
-    button2.hide();
-    button3.hide();
-    button.show();
   }
   else if (superState === "snake") {
-    grid.createGrid();
+    grid.displayGrid();
+    snake.makeSnake();
+    snake.updateSnake();
+  }
+
+  if (superState !== "start") {
+    asteroidsButton.hide();
+    snakeButton.hide();
+    spaceInvadersButton.hide();
+  }
+}
+function mousePressed() {
+  if (asteroidsState === "asteroids") {
+    lasers.push(new Laser(ship.pos, ship.heading));
+  }
+}
+
+function keyPressed() {
+  if (asteroidsState === "asteroids") {
+    if (keyIsDown(65)) {
+      ship.setRotation(-0.2);
+    } 
+    else if (keyIsDown(68)) {
+      ship.setRotation(0.2);
+    }
+    else if(keyIsDown(87)) {
+      ship.boosting = true;
+      ship.boost();
+    }
+    else if(keyIsDown(192)) {
+      answer = prompt("command console");
+      if (answer === "IDDQD") {
+        invulnurable = true;
+      }
+      else if (answer === "AUTOWIN") {
+        youWon = true;
+      }
+      else if (answer === "AUTOLOSE") {
+        gameOver = true;
+      }
+      else if (answer === "MAIN MENU") {
+        asteroidsState = "start";
+      }
+      else {
+        alert("Not A CheatCode");
+      }
+    }
+  }
+
+  else if (superState === "snake") {
+    if (keyIsDown(87) && snake.direction !== "down") {
+      snake.direction = "up";
+    }
+  
+    else if (keyIsDown(65) && snake.direction !== "right") {
+      snake.direction = "left";    
+    }
+  
+    else if (keyIsDown(68) && snake.direction !== "left") {
+      snake.direction = "right";    
+    }
+  
+    else if (keyIsDown(83) && snake.direction !== "up") {
+      snake.direction = "down";    
+    }
+  }
+}
+
+function keyReleased() {
+  if (asteroidsState === "asteroids") {
+    ship.setRotation(0);
+    ship.boosting = false;
   }
 }
