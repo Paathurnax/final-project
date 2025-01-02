@@ -92,10 +92,10 @@ function mousePressed() {
 function keyPressed() {
   if (asteroidsState === "asteroids") {
     if (keyIsDown(65)) {
-      ship.setRotation(-0.2);
+      ship.setRotation(-0.1);
     } 
     else if (keyIsDown(68)) {
-      ship.setRotation(0.2);
+      ship.setRotation(0.1);
     }
     else if(keyIsDown(87)) {
       ship.boosting = true;
