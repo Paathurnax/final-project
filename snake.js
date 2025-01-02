@@ -1,6 +1,7 @@
 //snake
 
 const GRID_SIZE = 100;
+const MOVE_DELAY = 30;
 
 class Grid {
   constructor() {
@@ -34,19 +35,27 @@ class Snake {
 
   updateSnake() {
     if (this.direction === "right") {
-      this.bodyArray[0].x += width/GRID_SIZE;
+      if (frameCount % MOVE_DELAY === 0) {
+        this.bodyArray[0].x += width/GRID_SIZE;
+      }
     }
 
     else if (this.direction === "down") {
-      this.bodyArray[0].y += height/GRID_SIZE;
+      if (frameCount % MOVE_DELAY === 0) {
+        this.bodyArray[0].y += height/GRID_SIZE;
+      }
     }
 
     else if (this.direction === "left") {
-      this.bodyArray[0].x -= width/GRID_SIZE;
+      if (frameCount % MOVE_DELAY === 0) {
+        this.bodyArray[0].x -= width/GRID_SIZE;
+      }
     }
 
     else if (this.direction === "up") {
-      this.bodyArray[0].y -= height/GRID_SIZE;
+      if (frameCount % MOVE_DELAY === 0) {
+        this.bodyArray[0].y -= height/GRID_SIZE;
+      }
     }
   }
 }

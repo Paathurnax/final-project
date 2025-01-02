@@ -6,15 +6,20 @@
 // - describe what you did to take this project "above and beyond"
 
 let superState = "start";
-let buttonOffset = 30;
-let buttonSize = buttonOffset*4;
+let buttonSize = 120;
 
 function preload() {
   grass = loadImage("grass.png");
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  if (windowHeight > windowWidth) {
+    createCanvas(windowWidth, windowWidth);
+  }
+
+  else {
+    createCanvas(windowHeight, windowHeight);
+  }
   grid = new Grid();
   snake = new Snake();
   ship = new Ship();
@@ -35,17 +40,17 @@ function createGameButtons() {
   snakeButton = createButton("Snake");
   spaceInvadersButton = createButton("Space Invaders");
 
-  asteroidsButton.position(width/2-buttonOffset*4, height/2);
+  asteroidsButton.position(width/2-snakeButton.width*2, height/2);
   snakeButton.position(width/2, height/2);
-  spaceInvadersButton.position(width/2+buttonOffset*4, height/2);
+  spaceInvadersButton.position(width/2+snakeButton.width*2, height/2);
 
   asteroidsButton.mousePressed(startAsteroids);
   snakeButton.mousePressed(startSnake);
   spaceInvadersButton.mousePressed(startSpaceInvaders);
 
-  asteroidsButton.size(buttonSize, buttonOffset);
-  snakeButton.size(buttonSize, buttonOffset);
-  spaceInvadersButton.size(buttonSize, buttonOffset);
+  asteroidsButton.size(buttonSize, buttonSize/4);
+  snakeButton.size(buttonSize, buttonSize/4);
+  spaceInvadersButton.size(buttonSize, buttonSize/4);
 }
 
 
