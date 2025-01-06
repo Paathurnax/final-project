@@ -13,13 +13,7 @@ function preload() {
 }
 
 function setup() {
-  if (windowHeight > windowWidth) {
-    createCanvas(windowWidth, windowWidth);
-  }
-
-  else {
-    createCanvas(windowHeight, windowHeight);
-  }
+  createCanvas(windowWidth, windowHeight);
   grid = new Grid();
   snake = new Snake();
   ship = new Ship();
