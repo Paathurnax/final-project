@@ -17,11 +17,13 @@ function setup() {
   grid = new Grid();
   snake = new Snake();
   ship = new Ship();
+  player = new Player();
   for (let i = 0; i<MAX_ASTEROIDS; i++) {
     asteroids.push(new Asteroid());
   }
   createGameButtons();
   createStartButton();
+  angleMode(DEGREES);
 }
 
 function draw() {
@@ -67,13 +69,19 @@ function superStateStuff() {
     spaceInvadersButton.show();
     asteroidsStartButton.hide();
   }
+
   else if (superState === "asteroids") {
     stateStuff();
   }
+
   else if (superState === "snake") {
     grid.displayGrid();
     snake.makeSnake();
     snake.updateSnake();
+  }
+
+  else if (superState === "spaceInvaders") {
+    player.displayPlayer();
   }
 
   if (superState !== "start") {
@@ -82,6 +90,7 @@ function superStateStuff() {
     spaceInvadersButton.hide();
   }
 }
+
 function mousePressed() {
   if (asteroidsState === "asteroids") {
     lasers.push(new Laser(ship.pos, ship.heading));
@@ -135,6 +144,15 @@ function keyPressed() {
   
     else if (keyIsDown(83) && snake.direction !== "up") {
       snake.direction = "down";    
+    }
+  }
+
+  else if (superState === "spaceInvaders") {
+    if (keyIsDown(65)) {
+      player.move("left");
+    }
+    else if (keyIsDown(68)) {
+      player.move("right");
     }
   }
 }
