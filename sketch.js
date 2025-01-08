@@ -23,7 +23,6 @@ function setup() {
   }
   createGameButtons();
   createStartButton();
-  angleMode(DEGREES);
 }
 
 function draw() {
@@ -148,11 +147,14 @@ function keyPressed() {
   }
 
   else if (superState === "spaceInvaders") {
-    if (keyIsDown(65)) {
-      player.move("left");
+    if (keyIsDown(87)) {
+      player.move("up");
     }
-    else if (keyIsDown(68)) {
-      player.move("right");
+    else if (keyIsDown(83)) {
+      player.move("down");
+    }
+    if (keyIsDown(69)) {
+      player.fireLaser();
     }
   }
 }
