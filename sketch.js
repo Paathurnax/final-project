@@ -94,6 +94,10 @@ function mousePressed() {
   if (asteroidsState === "asteroids") {
     lasers.push(new Laser(ship.pos, ship.heading));
   }
+
+  if (superState === "spaceInvaders") {
+    player.fireLaser();
+  }
 }
 
 function keyPressed() {
@@ -153,9 +157,8 @@ function keyPressed() {
     else if (keyIsDown(83)) {
       player.move("down");
     }
-    if (keyIsDown(69)) {
-      player.fireLaser();
-    }
+    // if (keyIsDown(69)) {
+    // }
   }
 }
 

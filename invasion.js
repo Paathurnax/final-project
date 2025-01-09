@@ -6,7 +6,6 @@ class Player {
     this.location = createVector(width/8, height/2);
     this.moveSpeed = 10;
     this.size = 10;
-    this.laserLocation = createVector(this.location.x+this.size/2, this.location.y);
     this.laserSpeed = 5;
   }
 
@@ -28,11 +27,10 @@ class Player {
       this.location.y+=this.moveSpeed;
     }
   }
-
-  fireLaser() {
-    point(this.laserLocation.x, this.laserLocation.y);
-    if (frameCount%2 === 0) {
-      this.laserLocation.x += this.laserSpeed;
-    }
-  }
 }
+
+// class Projectile {
+//   constructor(shipPos, ) {
+
+//   }
+// }
