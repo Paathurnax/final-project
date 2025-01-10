@@ -81,6 +81,10 @@ function superStateStuff() {
 
   else if (superState === "spaceInvaders") {
     player.displayPlayer();
+    if (Projectile) {
+      laser.display();
+      laser.move();
+    }
   }
 
   if (superState !== "start") {
@@ -93,10 +97,6 @@ function superStateStuff() {
 function mousePressed() {
   if (asteroidsState === "asteroids") {
     lasers.push(new Laser(ship.pos, ship.heading));
-  }
-
-  if (superState === "spaceInvaders") {
-    player.fireLaser();
   }
 }
 
