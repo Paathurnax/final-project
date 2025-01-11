@@ -14,10 +14,10 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  grid = new Grid();
   snake = new Snake();
   ship = new Ship();
-  player = new Player();
+  player = new Player(windowWidth, windowHeight);
+  food = new Consumable();
   for (let i = 0; i<MAX_ASTEROIDS; i++) {
     asteroids.push(new Asteroid());
   }
@@ -74,17 +74,16 @@ function superStateStuff() {
   }
 
   else if (superState === "snake") {
-    grid.displayGrid();
-    snake.makeSnake();
     snake.updateSnake();
+    food.render();
+    snake.makeSnake();
+    snake.hasEatenFood();
   }
 
   else if (superState === "spaceInvaders") {
     player.displayPlayer();
-    if (Projectile) {
-      laser.display();
-      laser.move();
-    }
+    laser.display();
+    laser.move();
   }
 
   if (superState !== "start") {

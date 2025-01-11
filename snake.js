@@ -1,30 +1,7 @@
 //snake
 
-const GRID_SIZE = 100;
-const MOVE_DELAY = 30;
-
-class Grid {
-  constructor() {
-    if (windowHeight > windowWidth) {
-      this.width = height/2;
-    }
-  
-    else {
-      this.width = width/2; 
-    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-  }
-
-  displayGrid() {
-    for (let x = width/4; x< this.width; x+= this.width/GRID_SIZE) {
-      for (let y = width/4; y <height; y += height / GRID_SIZE) {
-        stroke(0);
-        strokeWeight(1);
-        line(x, 0, x, height);
-        line(width/4, y, this.width, y);
-      }
-    }
-  }
-}
+const GRID_SIZE = 50;
+const MOVE_DELAY = 5;
 
 class Snake {
   constructor() {
@@ -36,14 +13,14 @@ class Snake {
   makeSnake() {
     fill("blue");
     for (let bodyPart of this.bodyArray) {
-      rect(bodyPart.x, bodyPart.y, width/GRID_SIZE, height/GRID_SIZE);
+      rect(bodyPart.x, bodyPart.y, width/GRID_SIZE/2, height/GRID_SIZE);
     }
   }
 
   updateSnake() {
     if (this.direction === "right") {
       if (frameCount % MOVE_DELAY === 0) {
-        this.bodyArray[0].x += width/GRID_SIZE;
+        this.bodyArray[0].x += width/GRID_SIZE/2;
       }
     }
 
@@ -55,7 +32,7 @@ class Snake {
 
     else if (this.direction === "left") {
       if (frameCount % MOVE_DELAY === 0) {
-        this.bodyArray[0].x -= width/GRID_SIZE;
+        this.bodyArray[0].x -= width/GRID_SIZE/2;
       }
     }
 
@@ -63,6 +40,41 @@ class Snake {
       if (frameCount % MOVE_DELAY === 0) {
         this.bodyArray[0].y -= height/GRID_SIZE;
       }
+    }
+  }
+
+  hasEatenFood() {
+    if (this.bodyArray[0].x === food.x && this.bodyArray[0].y === food.y) {
+      food.spawnFood();
+    }
+  }
+}
+
+class Consumable {
+  constructor() {
+    this.spawnFood();
+  }
+
+  spawnFood() {
+    let xLocation = random(width);
+    let yLocation = random(height);
+    this.x = xLocation - xLocation%(width/GRID_SIZE/2);
+    this.y = yLocation - yLocation%(height/GRID_SIZE);
+  }
+
+  render() {
+    fill("red");
+    rect(this.x, this.y, width/GRID_SIZE/2, height/GRID_SIZE);
+  }
+}
+
+function createGrid() {
+  for (let x = 0; x < width; x += width / GRID_SIZE/2) {
+    for (let y = 0; y < height; y += height / GRID_SIZE) {
+      stroke(0);
+      strokeWeight(1);
+      line(x, 0, x, height);
+      line(0, y, width, y);
     }
   }
 }
