@@ -44,7 +44,7 @@ class Snake {
   }
 
   hasEatenFood() {
-    if (this.bodyArray[0].x === food.x && this.bodyArray[0].y === food.y) {
+    if (round(this.bodyArray[0].x, 2) === round(food.x, 2) && round(this.bodyArray[0].y, 2) === round(food.y, 2)) {
       food.spawnFood();
     }
   }
