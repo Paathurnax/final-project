@@ -8,6 +8,9 @@ class Snake {
     this.bodyArray = [];
     this.bodyArray.push({x: width/2, y: height/2});
     this.direction = "right";
+    this.lastX = width/2;
+    this.lastY = height/2;
+    this.score = 0;
   }
 
   makeSnake() {
@@ -18,6 +21,14 @@ class Snake {
   }
 
   updateSnake() {
+    this.lastX = this.bodyArray[this.bodyArray.length-1].x;
+    this.lastY = this.bodyArray[this.bodyArray.length-1].y;
+    for (let i = this.bodyArray.length-1; i>=1; i--) {
+      this.bodyArray[i].x = this.bodyArray[i-1].x;
+      this.bodyArray[i].y = this.bodyArray[i-1].y;
+    }
+
+
     if (this.direction === "right") {
       if (frameCount % MOVE_DELAY === 0) {
         this.bodyArray[0].x += width/GRID_SIZE/2;
@@ -43,10 +54,20 @@ class Snake {
     }
   }
 
+  grow() {
+    this.bodyArray.push({x:this.lastX, y:this.lastY})
+  }
+
   hasEatenFood() {
     if (round(this.bodyArray[0].x, 2) === round(food.x, 2) && round(this.bodyArray[0].y, 2) === round(food.y, 2)) {
       food.spawnFood();
+      this.grow();
+      this.score++;
     }
+  }
+
+  displayScore() {
+    text(this.score, width-100, 50);
   }
 }
 

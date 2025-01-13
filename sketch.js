@@ -78,6 +78,7 @@ function superStateStuff() {
     food.render();
     snake.makeSnake();
     snake.hasEatenFood();
+    snake.displayScore();
   }
 
   else if (superState === "spaceInvaders") {
