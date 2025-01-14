@@ -1,10 +1,14 @@
 //snake
 
 const GRID_SIZE = 50;
-const MOVE_DELAY = 5;
+const MOVE_DELAY = 1;
 
 class Snake {
   constructor() {
+    this.spawn();
+  }
+
+  spawn() {
     this.bodyArray = [];
     this.bodyArray.push({x: width/2, y: height/2});
     this.direction = "right";
@@ -16,7 +20,7 @@ class Snake {
   makeSnake() {
     fill("blue");
     for (let bodyPart of this.bodyArray) {
-      rect(bodyPart.x, bodyPart.y, width/GRID_SIZE/2, height/GRID_SIZE);
+      rect(bodyPart.x, bodyPart.y, width/GRID_SIZE/2);
     }
   }
 
@@ -52,10 +56,14 @@ class Snake {
         this.bodyArray[0].y -= height/GRID_SIZE;
       }
     }
+
+    if (this.bodyArray[0].x === width) {
+      this.spawn();
+    }
   }
 
   grow() {
-    this.bodyArray.push({x:this.lastX, y:this.lastY})
+    this.bodyArray.push({x:this.lastX, y:this.lastY});
   }
 
   hasEatenFood() {
