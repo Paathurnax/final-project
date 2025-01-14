@@ -9,7 +9,7 @@ let superState = "start";
 let buttonSize = 120;
 
 function preload() {
-  grass = loadImage("grass.png");
+  bg = loadImage("space.gif");
 }
 
 function setup() {
@@ -26,7 +26,13 @@ function setup() {
 }
 
 function draw() {
-  background(220);
+  if (superState === "asteroids") {
+    background(bg);
+  }
+
+  else {
+    background(220);
+  }
   superStateStuff();
 }
 
