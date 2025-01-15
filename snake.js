@@ -1,7 +1,9 @@
 //snake
 
 const GRID_SIZE = 50;
-const MOVE_DELAY = 1;
+const MOVE_DELAY = 2;
+const MAX_TIME = 600000;
+let gameState = "start";
 
 class Snake {
   constructor() {
@@ -18,10 +20,12 @@ class Snake {
   }
 
   makeSnake() {
+    push();
     fill("blue");
     for (let bodyPart of this.bodyArray) {
-      rect(bodyPart.x, bodyPart.y, width/GRID_SIZE/2);
+      rect(bodyPart.x, bodyPart.y, width/GRID_SIZE);
     }
+    pop();
   }
 
   updateSnake() {
@@ -35,30 +39,26 @@ class Snake {
 
     if (this.direction === "right") {
       if (frameCount % MOVE_DELAY === 0) {
-        this.bodyArray[0].x += width/GRID_SIZE/2;
+        this.bodyArray[0].x += Math.floor(width/GRID_SIZE);
       }
     }
 
     else if (this.direction === "down") {
       if (frameCount % MOVE_DELAY === 0) {
-        this.bodyArray[0].y += height/GRID_SIZE;
+        this.bodyArray[0].y += Math.floor(height/GRID_SIZE);
       }
     }
 
     else if (this.direction === "left") {
       if (frameCount % MOVE_DELAY === 0) {
-        this.bodyArray[0].x -= width/GRID_SIZE/2;
+        this.bodyArray[0].x -= Math.floor(width/GRID_SIZE);
       }
     }
 
     else if (this.direction === "up") {
       if (frameCount % MOVE_DELAY === 0) {
-        this.bodyArray[0].y -= height/GRID_SIZE;
+        this.bodyArray[0].y -= Math.floor(height/GRID_SIZE);
       }
-    }
-
-    if (this.bodyArray[0].x === width) {
-      this.spawn();
     }
   }
 
@@ -67,7 +67,7 @@ class Snake {
   }
 
   hasEatenFood() {
-    if (round(this.bodyArray[0].x, 2) === round(food.x, 2) && round(this.bodyArray[0].y, 2) === round(food.y, 2)) {
+    if (round(this.bodyArray[0].x, 1) === round(food.x, 1) && round(this.bodyArray[0].y, 1) === round(food.y, 1)) {
       food.spawnFood();
       this.grow();
       this.score++;
@@ -75,7 +75,27 @@ class Snake {
   }
 
   displayScore() {
-    text(this.score, width-100, 50);
+    push();
+    text(this.score, width-100, height-100);
+    textSize(50);
+    pop();
+  }
+
+  timeTrial() {
+    let ms = millis();
+    if (this.score === 100 && ms < MAX_TIME) {
+      gameState = "WIN";
+    }
+
+    else if (ms>MAX_TIME) {
+      gameState = "LOSE";
+    }
+  }
+
+  edges() {
+    if (this.bodyArray[0].x > width) {
+      this.bodyArray[0].x = round(width/GRID_SIZE * this.bodyArray.length-1, 2);
+    }
   }
 }
 
@@ -87,23 +107,44 @@ class Consumable {
   spawnFood() {
     let xLocation = random(width);
     let yLocation = random(height);
-    this.x = xLocation - xLocation%(width/GRID_SIZE/2);
-    this.y = yLocation - yLocation%(height/GRID_SIZE);
+    this.x = Math.floor(xLocation - xLocation%(width/GRID_SIZE));
+    this.y = Math.floor(yLocation - yLocation%(height/GRID_SIZE));
   }
 
   render() {
+    push();
     fill("red");
-    rect(this.x, this.y, width/GRID_SIZE/2, height/GRID_SIZE);
+    rect(this.x, this.y, width/GRID_SIZE);
+    pop();
   }
 }
 
 function createGrid() {
-  for (let x = 0; x < width; x += width / GRID_SIZE/2) {
+  for (let x = 0; x < width; x += width / GRID_SIZE) {
     for (let y = 0; y < height; y += height / GRID_SIZE) {
       stroke(0);
       strokeWeight(1);
       line(x, 0, x, height);
       line(0, y, width, y);
     }
+  }
+}
+
+function snakeStuff(playerName) {
+  if (gameState === "start") {
+    playerName.updateSnake();
+    food.render();
+    playerName.makeSnake();
+    playerName.hasEatenFood();
+    playerName.displayScore();
+    playerName.timeTrial();
+    playerName.edges();
+  }
+  if (gameState === "WIN") {
+    push();
+    text("You Win!", width/2, height/2);
+    textSize(100);
+    textAlign(CENTER);
+    pop();
   }
 }

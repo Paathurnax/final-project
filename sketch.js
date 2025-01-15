@@ -13,7 +13,13 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  if (windowWidth > windowHeight) {
+    createCanvas(Math.floor(windowHeight), Math.floor(windowHeight));
+  }
+
+  else {
+    createCanvas(Math.floor(windowWidth), Math.floor(windowWidth));
+  }
   snake = new Snake();
   ship = new Ship();
   player = new Player(windowWidth, windowHeight);
@@ -23,6 +29,7 @@ function setup() {
   }
   createGameButtons();
   createStartButton();
+
 }
 
 function draw() {
@@ -80,11 +87,7 @@ function superStateStuff() {
   }
 
   else if (superState === "snake") {
-    snake.updateSnake();
-    food.render();
-    snake.makeSnake();
-    snake.hasEatenFood();
-    snake.displayScore();
+    snakeStuff(snake);
   }
 
   else if (superState === "spaceInvaders") {

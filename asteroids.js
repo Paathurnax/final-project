@@ -11,28 +11,12 @@ let minSize = ASTEROID_SIZE/MIN_DIVISER;
 let ship;
 let asteroids = [];
 let lasers = [];
-let gameOver;
-let youWon;
 let invulnurable = false;
 let answer;
 let score = 0;
 let asteroidsState = "start";
 let textOffset = 200;
 let asteroidsStartButton;
-
-// function setup() {
-//   createCanvas(windowWidth, windowHeight);
-// }
-
-// function draw() {
-//   background(220);
-//   if (superState === "asteroids") {
-//     stateStuff();
-//   }
-//   else {
-//     button.hide();
-//   }
-// }
 
 function stateStuff() {
   if (asteroidsState === "start") {
@@ -57,7 +41,7 @@ function stateStuff() {
         youWon = true;
       }
     }
-    else if (gameOver) {
+    else if (asteroidsState === "You Lose!") {
       text("you lose!", width/2, height/2);
       textSize(100);
       textAlign(CENTER);
@@ -114,7 +98,7 @@ function laserStuff() {
 function asteroidStuff() {
   for (let i = 0; i<asteroids.length; i++) {
     if (ship.hits(asteroids[i])) {
-      gameOver = true;
+      asteroidsState = "You Lose!";
     }
     asteroids[i].render();
     asteroids[i].update();
