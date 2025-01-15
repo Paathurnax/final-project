@@ -14,11 +14,11 @@ function preload() {
 
 function setup() {
   if (windowWidth > windowHeight) {
-    createCanvas(Math.floor(windowHeight), Math.floor(windowHeight));
+    createCanvas(windowHeight, windowHeight);
   }
 
   else {
-    createCanvas(Math.floor(windowWidth), Math.floor(windowWidth));
+    createCanvas(windowWidth, windowWidth);
   }
   snake = new Snake();
   ship = new Ship();
@@ -33,13 +33,14 @@ function setup() {
 }
 
 function draw() {
-  if (superState === "asteroids") {
-    background(bg);
-  }
+  // if (superState === "asteroids" && asteroidsState === "asteroids") {
+  //   background(bg);
+  // }
 
-  else {
-    background(220);
-  }
+  // else {
+  //   background(220);
+  // }
+  background(220);
   superStateStuff();
 }
 

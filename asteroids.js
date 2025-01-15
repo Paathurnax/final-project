@@ -30,26 +30,28 @@ function stateStuff() {
     pop();
   }
   else if (asteroidsState === "asteroids") {
-    if (!gameOver && !youWon) {
-      laserStuff();
-      asteroidStuff();
-      shipFunctions();
-      textSize(50);
-      asteroidsStartButton.hide();
-      text(score, width-100, 50);
-      if (score === MAX_ASTEROIDS*MIN_DIVISER*3) {
-        youWon = true;
-      }
+    laserStuff();
+    asteroidStuff();
+    shipFunctions();
+    textSize(50);
+    asteroidsStartButton.hide();
+    text(score, width-100, 50);
+    if (score === MAX_ASTEROIDS*MIN_DIVISER*3) {
+      asteroidsState = "You Win!";
     }
     else if (asteroidsState === "You Lose!") {
+      push();
       text("you lose!", width/2, height/2);
       textSize(100);
       textAlign(CENTER);
+      pop();
     }
-    else {
+    else if (asteroidsState === "You Win!") {
+      push();
       text("you win!", width/2, height/2);
       textSize(100);
       textAlign(CENTER);
+      pop();
     }
   }
 }
@@ -58,7 +60,7 @@ function createStartButton() {
   asteroidsStartButton = createButton("Start");
   asteroidsStartButton.mouseClicked(changeState);
   asteroidsStartButton.size(100);
-  asteroidsStartButton.center();
+  asteroidsStartButton.position(width/2, height/2);
 }
 
 function changeState() {

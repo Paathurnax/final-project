@@ -1,9 +1,10 @@
 //snake
 
 const GRID_SIZE = 50;
-const MOVE_DELAY = 2;
+const MOVE_DELAY = 4;
 const MAX_TIME = 600000;
 let gameState = "start";
+let moveAmount;
 
 class Snake {
   constructor() {
@@ -17,6 +18,7 @@ class Snake {
     this.lastX = width/2;
     this.lastY = height/2;
     this.score = 0;
+    moveAmount = width/GRID_SIZE;
   }
 
   makeSnake() {
@@ -39,25 +41,25 @@ class Snake {
 
     if (this.direction === "right") {
       if (frameCount % MOVE_DELAY === 0) {
-        this.bodyArray[0].x += Math.floor(width/GRID_SIZE);
+        this.bodyArray[0].x += moveAmount;
       }
     }
 
     else if (this.direction === "down") {
       if (frameCount % MOVE_DELAY === 0) {
-        this.bodyArray[0].y += Math.floor(height/GRID_SIZE);
+        this.bodyArray[0].y += moveAmount;
       }
     }
 
     else if (this.direction === "left") {
       if (frameCount % MOVE_DELAY === 0) {
-        this.bodyArray[0].x -= Math.floor(width/GRID_SIZE);
+        this.bodyArray[0].x -= moveAmount;
       }
     }
 
     else if (this.direction === "up") {
       if (frameCount % MOVE_DELAY === 0) {
-        this.bodyArray[0].y -= Math.floor(height/GRID_SIZE);
+        this.bodyArray[0].y -= moveAmount;
       }
     }
   }
@@ -67,7 +69,8 @@ class Snake {
   }
 
   hasEatenFood() {
-    if (round(this.bodyArray[0].x, 1) === round(food.x, 1) && round(this.bodyArray[0].y, 1) === round(food.y, 1)) {
+    if (this.bodyArray[0].x >=food.x && this.bodyArray[0].x < food.x + 1
+      && this.bodyArray[0].y >=food.y && this.bodyArray[0].y < food.y+1) {
       food.spawnFood();
       this.grow();
       this.score++;
@@ -76,7 +79,7 @@ class Snake {
 
   displayScore() {
     push();
-    text(this.score, width-100, height-100);
+    text(this.score, width-100, 100);
     textSize(50);
     pop();
   }
@@ -94,7 +97,7 @@ class Snake {
 
   edges() {
     if (this.bodyArray[0].x > width) {
-      this.bodyArray[0].x = round(width/GRID_SIZE * this.bodyArray.length-1, 2);
+      this.bodyArray[0].x = width/GRID_SIZE * this.bodyArray.length-2;
     }
   }
 }
@@ -105,10 +108,10 @@ class Consumable {
   }
 
   spawnFood() {
-    let xLocation = random(width);
-    let yLocation = random(height);
-    this.x = Math.floor(xLocation - xLocation%(width/GRID_SIZE));
-    this.y = Math.floor(yLocation - yLocation%(height/GRID_SIZE));
+    let xLocation = width/2;
+    let yLocation = height/2;
+    this.x = xLocation + width/GRID_SIZE * random(GRID_SIZE/2);
+    this.y = yLocation + height/GRID_SIZE * random(GRID_SIZE/2);
   }
 
   render() {
