@@ -1,6 +1,6 @@
 //snake
 
-const GRID_SIZE = 50;
+const GRID_SIZE = 24;
 const MOVE_DELAY = 4;
 const MAX_TIME = 600000;
 let gameState = "start";
@@ -14,7 +14,7 @@ class Snake {
   spawn() {
     this.bodyArray = [];
     this.bodyArray.push({x: width/2, y: height/2});
-    this.direction = "right";
+    this.direction = "none";
     this.lastX = width/2;
     this.lastY = height/2;
     this.score = 0;
@@ -69,8 +69,7 @@ class Snake {
   }
 
   hasEatenFood() {
-    if (this.bodyArray[0].x >=food.x && this.bodyArray[0].x < food.x + 1
-      && this.bodyArray[0].y >=food.y && this.bodyArray[0].y < food.y+1) {
+    if (round(this.bodyArray[0].x, 1) === round(food.x, 1) && round(this.bodyArray[0].y, 1) === round(food.y, 1)) {
       food.spawnFood();
       this.grow();
       this.score++;
@@ -97,7 +96,19 @@ class Snake {
 
   edges() {
     if (this.bodyArray[0].x > width) {
-      this.bodyArray[0].x = width/GRID_SIZE * this.bodyArray.length-2;
+      this.bodyArray[0].x = 0;
+    }
+
+    if (this.bodyArray[0].x < 0) {
+      this.bodyArray[0].x = width;
+    }
+
+    if (this.bodyArray[0].y > height) {
+      this.bodyArray[0].y = 0;
+    }
+
+    if (this.bodyArray[0].y < 0) {
+      this.bodyArray[0].y = height;
     }
   }
 }
@@ -108,10 +119,10 @@ class Consumable {
   }
 
   spawnFood() {
-    let xLocation = width/2;
-    let yLocation = height/2;
-    this.x = xLocation + width/GRID_SIZE * random(GRID_SIZE/2);
-    this.y = yLocation + height/GRID_SIZE * random(GRID_SIZE/2);
+    let randX = random(width);
+    let randY = random(height);
+    this.x = randX - randX % (width / GRID_SIZE);
+    this.y = randY - randY % (height / GRID_SIZE);
   }
 
   render() {
@@ -142,6 +153,7 @@ function snakeStuff(playerName) {
     playerName.displayScore();
     playerName.timeTrial();
     playerName.edges();
+    createGrid();
   }
   if (gameState === "WIN") {
     push();
