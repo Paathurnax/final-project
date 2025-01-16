@@ -3,7 +3,7 @@
 const GRID_SIZE = 24;
 const MOVE_DELAY = 4;
 const MAX_TIME = 600000;
-let gameState = "start";
+let gameState;
 let moveAmount;
 
 class Snake {
@@ -133,6 +133,17 @@ class Consumable {
   }
 }
 
+function createSnakeButton() {
+  snakeGameButton = createButton("Start Game");
+  snakeGameButton.position(width/2, height/2);
+  snakeGameButton.size(100, 50);
+  snakeGameButton.mousePressed(startGame);
+}
+
+function startGame() {
+  gameState = "Start Game";
+}
+
 function createGrid() {
   for (let x = 0; x < width; x += width / GRID_SIZE) {
     for (let y = 0; y < height; y += height / GRID_SIZE) {
@@ -146,6 +157,15 @@ function createGrid() {
 
 function snakeStuff(playerName) {
   if (gameState === "start") {
+    background("lightgreen");
+    snakeGameButton.show();
+    push();
+    textSize(100);
+    text("Snake", width/3.5, height/3);
+    pop();
+  }
+
+  else if (gameState === "Start Game") {
     playerName.updateSnake();
     food.render();
     playerName.makeSnake();
@@ -154,12 +174,25 @@ function snakeStuff(playerName) {
     playerName.timeTrial();
     playerName.edges();
     createGrid();
+    snakeGameButton.hide();
   }
-  if (gameState === "WIN") {
+  else if (gameState === "WIN") {
     push();
     text("You Win!", width/2, height/2);
     textSize(100);
-    textAlign(CENTER);
     pop();
+    snakeGameButton.hide();
+  }
+
+  else if (gameState === "LOSE") {
+    push();
+    text("You Lose!", width/2, height/2);
+    textSize(100);
+    pop();
+    snakeGameButton.hide();
+  }
+
+  else if (superState === "snake") {
+    gameState = "start";
   }
 }

@@ -23,7 +23,7 @@ function setup() {
   }
   createGameButtons();
   createStartButton();
-
+  createSnakeButton();
 }
 
 function draw() {
