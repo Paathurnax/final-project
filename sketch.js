@@ -124,6 +124,10 @@ function mousePressed() {
   if (asteroidsState === "asteroids") {
     lasers.push(new Laser(ship.pos, ship.heading));
   }
+
+  else if (superState === "spaceInvaders") {
+    laser = new Projectile(player.location);
+  }
 }
 
 //key detection for all 3 games

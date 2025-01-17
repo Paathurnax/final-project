@@ -3,9 +3,9 @@
 
 class Player {
   constructor(width, height) {
-    this.location = createVector(width/8, height/2);
     this.moveSpeed = 10;
     this.size = 10;
+    this.location = createVector(this.size*2, height/2);
   }
 
   displayPlayer() {
@@ -36,7 +36,11 @@ class Projectile {
   }
 
   display() {
+    push();
+    strokeWeight(4);
+    stroke("blue");
     point(this.x, this.y);
+    pop();
   }
 
   move() {
