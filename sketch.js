@@ -12,6 +12,7 @@ let buttonSize = 120;
 //loading the background for asteroids (not currently being used)
 function preload() {
   bg = loadImage("space.gif");
+  pew = loadSound("space laser.wav");
 }
 
 
@@ -123,6 +124,7 @@ function superStateStuff() {
 function mousePressed() {
   if (asteroidsState === "asteroids") {
     lasers.push(new Laser(ship.pos, ship.heading));
+    pew.play();
   }
 
   else if (superState === "spaceInvaders") {
