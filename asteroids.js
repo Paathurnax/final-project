@@ -19,16 +19,20 @@ let textOffset = 200;
 let asteroidsStartButton;
 
 function stateStuff() {
+  //Start screen
   if (asteroidsState === "start") {
     background(0);
     push();
     fill(255);
+    //title text
     textSize(100);
     textWidth(textOffset*2);
     text("ASTEROIDS", width/2-textOffset*1.5, height-textOffset*2.5);
     asteroidsStartButton.show();
     pop();
   }
+
+  //starting the game
   else if (asteroidsState === "asteroids") {
     laserStuff();
     asteroidStuff();
@@ -39,6 +43,8 @@ function stateStuff() {
     if (score === MAX_ASTEROIDS*MIN_DIVISER*3) {
       asteroidsState = "You Win!";
     }
+
+    //you lost
     else if (asteroidsState === "You Lose!") {
       push();
       text("you lose!", width/2, height/2);
@@ -46,6 +52,8 @@ function stateStuff() {
       textAlign(CENTER);
       pop();
     }
+
+    //you won
     else if (asteroidsState === "You Win!") {
       push();
       text("you win!", width/2, height/2);
@@ -56,16 +64,20 @@ function stateStuff() {
   }
 }
 
+//creating the button that starts the game
 function createStartButton() {
   asteroidsStartButton = createButton("Start");
   asteroidsStartButton.mouseClicked(changeState);
-  asteroidsStartButton.size(100);
-  asteroidsStartButton.position(width/2, height/2);
+  asteroidsStartButton.size(buttonSize, buttonSize/4);
+  asteroidsStartButton.position(width/2-buttonSize/2, height/2);
 }
 
+//function for the button to run when clicked
 function changeState() {
   asteroidsState = "asteroids";
 }
+
+//exactly what the name says
 function shipFunctions() {
   ship.render();
   ship.turn();
@@ -73,6 +85,7 @@ function shipFunctions() {
   ship.edges();
 }
 
+//laser functions and loops
 function laserStuff() {
   for (let i = lasers.length-1; i>=0; i--) {
     lasers[i].render();
@@ -84,6 +97,7 @@ function laserStuff() {
       for (let j = asteroids.length-1; j>=0; j--) {
         if (lasers[i].hits(asteroids[j])) {
           score++;
+          //checking if the asteroid is big enough to be hit
           if (asteroids[j].size > minSize) {
             let newAsteroids = asteroids[j].breakApart();       
             asteroids = asteroids.concat(newAsteroids);
@@ -97,18 +111,24 @@ function laserStuff() {
   }
 }
 
+//asteroid functions and loops
 function asteroidStuff() {
   for (let i = 0; i<asteroids.length; i++) {
     if (ship.hits(asteroids[i])) {
       asteroidsState = "You Lose!";
     }
+
+    //running the asteroid fucntions
     asteroids[i].render();
     asteroids[i].update();
     asteroids[i].edges();
   }
 }
 
+//class for the player
 class Ship {
+
+  //initializing the variables
   constructor() {
     this.pos = createVector(width/2, height/2);
     this.size = 10;
@@ -118,6 +138,7 @@ class Ship {
     this.boosting = false;
   }
   
+  //rendering the ship
   render() {
     push();
     translate(this.pos.x, this.pos.y);
@@ -127,19 +148,23 @@ class Ship {
     pop();
   }
   
+  //updating the ship for velocity changes
   update() {
     this.pos.add(this.velocity);
     this.velocity.mult(DRAG);
   }
   
+  //turning the ship
   setRotation(angle) {
     this.angle = angle;
   }
   
+  //turning the ship 2
   turn() {
     this.heading += this.angle;
   }
   
+  //adding velocity
   boost() {
     if (this.boosting) {
       let force = p5.Vector.fromAngle(this.heading);
@@ -148,6 +173,7 @@ class Ship {
     } 
   }
   
+  //making the ship go from side to side when hitting the edge of the canvas
   edges() {
     if (this.pos.x > width+this.size) {
       this.pos.x = -this.size;
@@ -166,7 +192,10 @@ class Ship {
     }
   }
   
+  //hit detection for when the ship hits an asteroid
   hits(asteroid) {
+
+    //statement to check if a specific cheatcode was used and if the spawn timer has run out
     if(!invulnurable && frameCount>300) {
       let distance = dist(this.pos.x, this.pos.y, asteroid.pos.x, asteroid.pos.y);
       return distance<this.size+asteroid.size*1.5;
@@ -174,7 +203,10 @@ class Ship {
   }
 }
 
+//class for the asteroids
 class Asteroid {
+  
+  //randomizing initial positions and changing size when needed
   constructor(pos, size) {
     if (pos) {
       this.pos = pos.copy();
@@ -189,6 +221,8 @@ class Asteroid {
     else {
       this.size = 25;
     }
+
+    //radnomizing the vertex amounts and the asteroids velocity
     this.velocity = p5.Vector.random2D();
     this.vertexAmount = floor(random(5, 15));
     this.offset = [];
@@ -196,6 +230,8 @@ class Asteroid {
       this.offset[k] = random(-this.size/2, this.size);
     }
   }
+
+  //displaying the asteroids
   render() {
     push();
     translate(this.pos.x, this.pos.y);
@@ -211,10 +247,12 @@ class Asteroid {
     pop();
   }
   
+  //moving the asteroids across the screen
   update() {
     this.pos.add(this.velocity);
   }
   
+  //teleporting the asteroid to the opposite side of the canvas when an edge is hit
   edges() {
     if (this.pos.x > width+this.size) {
       this.pos.x = -this.size;
@@ -233,6 +271,7 @@ class Asteroid {
     }
   }
   
+  //creating new, smaller asteroids whenever it is shot by the player
   breakApart() {
     let newSpaceRocks = [];
     newSpaceRocks[0] = new Asteroid(this.pos, this.size);
@@ -241,17 +280,23 @@ class Asteroid {
   }
 }
 
+//class for the lasers fired by the player
 class Laser {
+
+  //initial location and launch angle
   constructor(shipPos, angle) {
     this.pos = createVector(shipPos.x, shipPos.y);
     this.velocity = p5.Vector.fromAngle(angle);
     this.velocity.mult(VEL_MULTI);
     
   }
+
+  //moving the laser
   update() {
     this.pos.add(this.velocity);
   }
   
+  //displaying the laser
   render() {
     push();
     stroke("red");
@@ -260,11 +305,13 @@ class Laser {
     pop();
   }
   
+  //hit detection to check if the laser has hit an asteroid
   hits(asteroid) {
     let distance = dist(this.pos.x, this.pos.y, asteroid.pos.x, asteroid.pos.y);
     return distance<asteroid.size*1.5;
   }
   
+  //removing the laser when it leaves the screen
   offScreen() {
     return this.pos.x > width || this.pos.x < 0 || (this.pos.y > height || this.pos.y < 0);
   }

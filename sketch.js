@@ -5,27 +5,37 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
+//initializing the variables
 let superState = "start";
 let buttonSize = 120;
 
+//loading the background for asteroids (not currently being used)
 function preload() {
   bg = loadImage("space.gif");
 }
 
+
+//using all the classes
 function setup() {
+//creating the canvas
   createCanvas(700, 700);
   snake = new Snake();
   ship = new Ship();
   player = new Player(windowWidth, windowHeight);
   food = new Consumable();
+
+  //creating the asteroids
   for (let i = 0; i<MAX_ASTEROIDS; i++) {
     asteroids.push(new Asteroid());
   }
+
+  //button functions
   createGameButtons();
   createStartButton();
   createSnakeButton();
 }
 
+//super state function and rendering the background
 function draw() {
   // if (superState === "asteroids" && asteroidsState === "asteroids") {
   //   background(bg);
@@ -38,14 +48,15 @@ function draw() {
   superStateStuff();
 }
 
+//creating all three of the game buttons
 function createGameButtons() {
   asteroidsButton = createButton("Asteroids");
   snakeButton = createButton("Snake");
   spaceInvadersButton = createButton("Space Invaders");
 
-  asteroidsButton.position(width/2-snakeButton.width*2, height/2);
-  snakeButton.position(width/2, height/2);
-  spaceInvadersButton.position(width/2+snakeButton.width*2, height/2);
+  asteroidsButton.position(width/2-buttonSize/2, height/2-buttonSize/4);
+  snakeButton.position(width/2-buttonSize/2, height/2);
+  spaceInvadersButton.position(width/2-buttonSize/2, height/2+buttonSize/4);
 
   asteroidsButton.mousePressed(startAsteroids);
   snakeButton.mousePressed(startSnake);
@@ -56,41 +67,51 @@ function createGameButtons() {
   spaceInvadersButton.size(buttonSize, buttonSize/4);
 }
 
-
+//fucntions for each game button to run when clicked
 function startAsteroids() {
   superState = "asteroids";
 }
 
 function startSnake() {
   superState = "snake";
+  gameState = "start";
 }
 
 function startSpaceInvaders() {
   superState = "spaceInvaders";
 }
 
+//state related and specific game functions
 function superStateStuff() {
+
+  //hiding and showing buttons when needed
   if (superState === "start") {
     asteroidsButton.show();
     snakeButton.show();
-    spaceInvadersButton.show();
+    //not showing the space invaders button do to extensive bugs and issues (game is a heavy WIP atm)
+    // spaceInvadersButton.show();
     asteroidsStartButton.hide();
+    snakeGameButton.hide();
   }
 
+  //starting the asteroids game
   else if (superState === "asteroids") {
     stateStuff();
   }
 
+  //starting snake
   else if (superState === "snake") {
     snakeStuff(snake);
   }
 
+  //starting space invaders
   else if (superState === "spaceInvaders") {
     player.displayPlayer();
     laser.display();
     laser.move();
   }
 
+  //hiding the game buttons when the state changes
   if (superState !== "start") {
     asteroidsButton.hide();
     snakeButton.hide();
@@ -98,34 +119,44 @@ function superStateStuff() {
   }
 }
 
+//shooting a laser when the mouse is pressed while playing asteroids
 function mousePressed() {
   if (asteroidsState === "asteroids") {
     lasers.push(new Laser(ship.pos, ship.heading));
   }
 }
 
+//key detection for all 3 games
 function keyPressed() {
+
+  //for asteroids
   if (asteroidsState === "asteroids") {
+
+    //rotating the ship
     if (keyIsDown(65)) {
       ship.setRotation(-0.1);
     } 
     else if (keyIsDown(68)) {
       ship.setRotation(0.1);
     }
+
+    //moving the ship
     else if(keyIsDown(87)) {
       ship.boosting = true;
       ship.boost();
     }
+
+    //this is a secret lol
     else if(keyIsDown(192)) {
       answer = prompt("command console");
       if (answer === "IDDQD") {
         invulnurable = true;
       }
       else if (answer === "AUTOWIN") {
-        youWon = true;
+        asteroidsState = "You Win!";
       }
       else if (answer === "AUTOLOSE") {
-        gameOver = true;
+        asteroidsState = "You Lose!";
       }
       else if (answer === "MAIN MENU") {
         asteroidsState = "start";
@@ -136,7 +167,10 @@ function keyPressed() {
     }
   }
 
+  //snake keybinds
   else if (superState === "snake") {
+
+    //changing the movement direction of the snake
     if (keyIsDown(87) && snake.direction !== "down") {
       snake.direction = "up";
     }
@@ -154,6 +188,7 @@ function keyPressed() {
     }
   }
 
+  //space invaders key binds
   else if (superState === "spaceInvaders") {
     if (keyIsDown(87)) {
       player.move("up");
@@ -166,7 +201,10 @@ function keyPressed() {
   }
 }
 
+//key released function
 function keyReleased() {
+
+  //stops accelerating the ship when the key is no longer being pressed and stops ship rotation
   if (asteroidsState === "asteroids") {
     ship.setRotation(0);
     ship.boosting = false;

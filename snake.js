@@ -1,26 +1,35 @@
 //snake
 
+
+//initializing the variables
 const GRID_SIZE = 24;
 const MOVE_DELAY = 4;
 const MAX_TIME = 600000;
 let gameState;
 let moveAmount;
 
+
+//player class
 class Snake {
   constructor() {
+    //running function when a new snake is created
     this.spawn();
   }
 
+  //makes the initial snake and the initial coordinates
   spawn() {
     this.bodyArray = [];
     this.bodyArray.push({x: width/2, y: height/2});
     this.direction = "none";
     this.lastX = width/2;
     this.lastY = height/2;
+
+    //resets the score
     this.score = 0;
     moveAmount = width/GRID_SIZE;
   }
 
+  //displays the snake/player
   makeSnake() {
     push();
     fill("blue");
@@ -30,6 +39,7 @@ class Snake {
     pop();
   }
 
+  //updates the snake for movement purposes
   updateSnake() {
     this.lastX = this.bodyArray[this.bodyArray.length-1].x;
     this.lastY = this.bodyArray[this.bodyArray.length-1].y;
@@ -64,10 +74,12 @@ class Snake {
     }
   }
 
+  //adds more parts to the snake when food is eaten
   grow() {
     this.bodyArray.push({x:this.lastX, y:this.lastY});
   }
 
+  //checks to see if the food has been "eaten"
   hasEatenFood() {
     if (round(this.bodyArray[0].x, 1) === round(food.x, 1) && round(this.bodyArray[0].y, 1) === round(food.y, 1)) {
       food.spawnFood();
@@ -76,6 +88,7 @@ class Snake {
     }
   }
 
+  //displays the score on the top right of the canvas
   displayScore() {
     push();
     text(this.score, width-100, 100);
@@ -83,6 +96,7 @@ class Snake {
     pop();
   }
 
+  //the game is timed as to make it so you must reach a certain score within 5 minutes
   timeTrial() {
     let ms = millis();
     if (this.score === 100 && ms < MAX_TIME) {
@@ -94,6 +108,7 @@ class Snake {
     }
   }
 
+  //moves the snakes head when an edge of the canvas is touched
   edges() {
     if (this.bodyArray[0].x > width) {
       this.bodyArray[0].x = 0;
@@ -113,11 +128,15 @@ class Snake {
   }
 }
 
+
+//food class
 class Consumable {
   constructor() {
+    //running the spawn function when a new food is made
     this.spawnFood();
   }
 
+  //gives the food a random location
   spawnFood() {
     let randX = random(width);
     let randY = random(height);
@@ -125,6 +144,7 @@ class Consumable {
     this.y = randY - randY % (height / GRID_SIZE);
   }
 
+  //displays the food
   render() {
     push();
     fill("red");
@@ -133,17 +153,20 @@ class Consumable {
   }
 }
 
+//button to start the game
 function createSnakeButton() {
   snakeGameButton = createButton("Start Game");
-  snakeGameButton.position(width/2, height/2);
-  snakeGameButton.size(100, 50);
+  snakeGameButton.position(width/2-buttonSize/2, height/2);
+  snakeGameButton.size(buttonSize, buttonSize/4);
   snakeGameButton.mousePressed(startGame);
 }
 
+//function for the button to run when it is pressed
 function startGame() {
   gameState = "Start Game";
 }
 
+//creates the grid (will be removed in final product)
 function createGrid() {
   for (let x = 0; x < width; x += width / GRID_SIZE) {
     for (let y = 0; y < height; y += height / GRID_SIZE) {
@@ -155,16 +178,20 @@ function createGrid() {
   }
 }
 
+//snake related function calls and whatnot
 function snakeStuff(playerName) {
+
+  //start screem
   if (gameState === "start") {
     background("lightgreen");
-    snakeGameButton.show();
     push();
     textSize(100);
     text("Snake", width/3.5, height/3);
     pop();
+    snakeGameButton.show();
   }
 
+  //starting the game
   else if (gameState === "Start Game") {
     playerName.updateSnake();
     food.render();
@@ -176,6 +203,8 @@ function snakeStuff(playerName) {
     createGrid();
     snakeGameButton.hide();
   }
+
+  //you won!
   else if (gameState === "WIN") {
     push();
     text("You Win!", width/2, height/2);
@@ -184,15 +213,12 @@ function snakeStuff(playerName) {
     snakeGameButton.hide();
   }
 
+  //you lost!
   else if (gameState === "LOSE") {
     push();
     text("You Lose!", width/2, height/2);
     textSize(100);
     pop();
     snakeGameButton.hide();
-  }
-
-  else if (superState === "snake") {
-    gameState = "start";
   }
 }
