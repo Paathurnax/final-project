@@ -17,11 +17,15 @@ let score = 0;
 let asteroidsState = "start";
 let textOffset = 200;
 let asteroidsStartButton;
+let gameOver;
+let gameWon;
+let spawnTimer;
 
 function stateStuff() {
   //Start screen
   if (asteroidsState === "start") {
     background(0);
+    
     push();
     fill(255);
     //title text
@@ -41,40 +45,44 @@ function stateStuff() {
     asteroidsStartButton.hide();
     text(score, width-100, 50);
     if (score === MAX_ASTEROIDS*MIN_DIVISER*3) {
-      asteroidsState = "You Win!";
-    }
-
-    //you lost
-    else if (asteroidsState === "You Lose!") {
-      push();
-      text("you lose!", width/2, height/2);
-      textSize(100);
-      textAlign(CENTER);
-      pop();
-    }
-
-    //you won
-    else if (asteroidsState === "You Win!") {
-      push();
-      text("you win!", width/2, height/2);
-      textSize(100);
-      textAlign(CENTER);
-      pop();
+      asteroidsState = "win";
     }
   }
+
+  //you lost
+  if (asteroidsState === "lose") {
+    push();
+    text("you lose!", width/2-textWidth("you lose!")/2, height/2);
+    textSize(100);
+    pop();
+    asteroidsBackgroundMusic.stop();
+  }
+
+  //you won
+  if (asteroidsState === "win") {
+    push();
+    text("you win!", width/2-textWidth("you win!")/2, height/2);
+    textSize(100);
+    pop();
+    asteroidsBackgroundMusic.stop();
+  }
 }
+
 
 //creating the button that starts the game
 function createStartButton() {
   asteroidsStartButton = createButton("Start");
   asteroidsStartButton.mouseClicked(changeState);
   asteroidsStartButton.size(buttonSize, buttonSize/4);
-  asteroidsStartButton.position(width/2-buttonSize/2, height/2);
+  asteroidsStartButton.position(windowWidth/2-buttonSize/2, height/2);
 }
 
 //function for the button to run when clicked
 function changeState() {
+  buttonPressedSound.play();
   asteroidsState = "asteroids";
+  asteroidsTitleMusic.stop();
+  asteroidsBackgroundMusic.loop();
 }
 
 //exactly what the name says
@@ -115,7 +123,7 @@ function laserStuff() {
 function asteroidStuff() {
   for (let i = 0; i<asteroids.length; i++) {
     if (ship.hits(asteroids[i])) {
-      asteroidsState = "You Lose!";
+      asteroidsState = "lose";
     }
 
     //running the asteroid fucntions
@@ -194,9 +202,9 @@ class Ship {
   
   //hit detection for when the ship hits an asteroid
   hits(asteroid) {
-
+    spawnTimer = millis();
     //statement to check if a specific cheatcode was used and if the spawn timer has run out
-    if(!invulnurable && frameCount>300) {
+    if(!invulnurable && spawnTimer>5000) {
       let distance = dist(this.pos.x, this.pos.y, asteroid.pos.x, asteroid.pos.y);
       return distance<this.size+asteroid.size*1.5;
     }

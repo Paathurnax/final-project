@@ -82,6 +82,7 @@ class Snake {
   //checks to see if the food has been "eaten"
   hasEatenFood() {
     if (round(this.bodyArray[0].x, 1) === round(food.x, 1) && round(this.bodyArray[0].y, 1) === round(food.y, 1)) {
+      snakeEatingSound.play();
       food.spawnFood();
       this.grow();
       this.score++;
@@ -156,14 +157,17 @@ class Consumable {
 //button to start the game
 function createSnakeButton() {
   snakeGameButton = createButton("Start Game");
-  snakeGameButton.position(width/2-buttonSize/2, height/2);
+  snakeGameButton.position(windowWidth/2-buttonSize/2, height/2);
   snakeGameButton.size(buttonSize, buttonSize/4);
   snakeGameButton.mousePressed(startGame);
 }
 
 //function for the button to run when it is pressed
 function startGame() {
+  buttonPressedSound.play();
   gameState = "Start Game";
+  snakeTitleMusic.stop();
+  snakeBackgroundMusic.loop();
 }
 
 //creates the grid (will be removed in final product)
@@ -186,7 +190,7 @@ function snakeStuff(playerName) {
     background("lightgreen");
     push();
     textSize(100);
-    text("Snake", width/3.5, height/3);
+    text("Snake", width/2-textWidth("Snake")/2, height/3);
     pop();
     snakeGameButton.show();
   }
@@ -211,6 +215,7 @@ function snakeStuff(playerName) {
     textSize(100);
     pop();
     snakeGameButton.hide();
+    snakeBackgroundMusic.stop();
   }
 
   //you lost!
@@ -220,5 +225,6 @@ function snakeStuff(playerName) {
     textSize(100);
     pop();
     snakeGameButton.hide();
+    snakeBackgroundMusic.stop();
   }
 }

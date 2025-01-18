@@ -11,15 +11,25 @@ let buttonSize = 120;
 
 //loading the background for asteroids (not currently being used)
 function preload() {
-  bg = loadImage("space.gif");
-  pew = loadSound("space laser.wav");
+  // bg = loadImage("space.gif");
+  pew = loadSound("laser_shooting_sfx.wav");
+  asteroidsTitleMusic = loadSound("Cyberpunk Moonlight Sonata.mp3");
+  snakeTitleMusic = loadSound("awesomeness.wav");
+  asteroidsBackgroundMusic = loadSound("asteroidsbg.ogg");
+  snakeBackgroundMusic = loadSound("calm.wav");
+  buttonPressedSound = loadSound("button.wav");
+  snakeEatingSound = loadSound("snakeEat.ogg");
 }
 
 
 //using all the classes
 function setup() {
-//creating the canvas
-  createCanvas(700, 700);
+//creating the canvas and centering it
+  let cnv = createCanvas(windowHeight, windowHeight);
+  let canvasX = (windowWidth-width)/2;
+  let canvasY = (windowHeight-height)/2;
+  cnv.position(canvasX, canvasY);
+  
   snake = new Snake();
   ship = new Ship();
   player = new Player(windowWidth, windowHeight);
@@ -55,9 +65,9 @@ function createGameButtons() {
   snakeButton = createButton("Snake");
   spaceInvadersButton = createButton("Space Invaders");
 
-  asteroidsButton.position(width/2-buttonSize/2, height/2-buttonSize/4);
-  snakeButton.position(width/2-buttonSize/2, height/2);
-  spaceInvadersButton.position(width/2-buttonSize/2, height/2+buttonSize/4);
+  asteroidsButton.position(windowWidth/2-buttonSize/2, height/2-buttonSize/4);
+  snakeButton.position(windowWidth/2-buttonSize/2, height/2);
+  spaceInvadersButton.position(windowWidth/2-buttonSize/2, height/2+buttonSize/4);
 
   asteroidsButton.mousePressed(startAsteroids);
   snakeButton.mousePressed(startSnake);
@@ -70,15 +80,20 @@ function createGameButtons() {
 
 //fucntions for each game button to run when clicked
 function startAsteroids() {
+  buttonPressedSound.play();
   superState = "asteroids";
+  asteroidsTitleMusic.loop();
 }
 
 function startSnake() {
+  buttonPressedSound.play();
   superState = "snake";
   gameState = "start";
+  snakeTitleMusic.loop();
 }
 
 function startSpaceInvaders() {
+  buttonPressedSound.play();
   superState = "spaceInvaders";
 }
 
@@ -159,10 +174,10 @@ function keyPressed() {
         invulnurable = true;
       }
       else if (answer === "AUTOWIN") {
-        asteroidsState = "You Win!";
+        asteroidsState = "win";
       }
       else if (answer === "AUTOLOSE") {
-        asteroidsState = "You Lose!";
+        asteroidsState = "lose";
       }
       else if (answer === "MAIN MENU") {
         asteroidsState = "start";
