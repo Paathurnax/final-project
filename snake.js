@@ -204,12 +204,14 @@ function snakeStuff(playerName) {
     playerName.displayScore();
     playerName.timeTrial();
     playerName.edges();
-    createGrid();
     snakeGameButton.hide();
   }
 
   //you won!
   else if (gameState === "WIN") {
+    if (!universalWinMusic.isPlaying()) {
+      universalWinMusic.loop();
+    }
     push();
     text("You Win!", width/2, height/2);
     textSize(100);
@@ -220,8 +222,11 @@ function snakeStuff(playerName) {
 
   //you lost!
   else if (gameState === "LOSE") {
+    if (!universalLoseMusic.isPlaying()) {
+      universalLoseMusic.loop();
+    }
     push();
-    text("You Lose!", width/2, height/2);
+    text("You Lose!", width/2-textWidth("You Lose!")/2, height/2);
     textSize(100);
     pop();
     snakeGameButton.hide();

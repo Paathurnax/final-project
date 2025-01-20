@@ -33,7 +33,7 @@ class Ball {
 
   loseLife() {
     if (this.position.y > height-this.radius) {
-      // lives--;
+      lives--;
       this.position.x = width/2;
       this.position.y = height/2;
       this.velocity.set(this.speed, -this.speed);
@@ -140,6 +140,12 @@ class Brick {
       }
     }
   }
+
+  win() {
+    if (this.brickArray.length <=0) {
+      breakState = "win";
+    }
+  }
 }
 
 function breakoutStuff() {
@@ -162,10 +168,29 @@ function breakoutStuff() {
     if (keyIsDown(65)) {
       paddle.move("left");
     }
-  
     else if (keyIsDown(68)) {
       paddle.move("right");
     }
+  }
+
+  else if (breakState === "lose") {
+    if (!universalLoseMusic.isPlaying()) {
+      universalLoseMusic.loop();
+    }
+    push();
+    text("you lose!", width/2-textWidth("you lose!")/2, height/2);
+    textSize(100);
+    pop();
+  }
+
+  else if (breakState === "win") {
+    if (!universalWinMusic.isPlaying()) {
+      universalWinMusic.loop();
+    }
+    push();
+    text("you win!", width/2-textWidth("you win!")/2, height/2);
+    textSize(100);
+    pop();
   }
 }
 

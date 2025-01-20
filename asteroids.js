@@ -51,6 +51,9 @@ function stateStuff() {
 
   //you lost
   if (asteroidsState === "lose") {
+    if (!universalLoseMusic.isPlaying()) {
+      universalLoseMusic.loop();
+    }
     push();
     text("you lose!", width/2-textWidth("you lose!")/2, height/2);
     textSize(100);
@@ -60,6 +63,9 @@ function stateStuff() {
 
   //you won
   if (asteroidsState === "win") {
+    if (!universalWinMusic.isPlaying()) {
+      universalWinMusic.loop();
+    }
     push();
     text("you win!", width/2-textWidth("you win!")/2, height/2);
     textSize(100);
