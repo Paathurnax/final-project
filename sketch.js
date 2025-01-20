@@ -9,6 +9,7 @@
 let superState = "start";
 let buttonSize = 120;
 
+
 //loading the background for asteroids (not currently being used)
 function preload() {
   // bg = loadImage("space.gif");
@@ -32,29 +33,27 @@ function setup() {
   
   snake = new Snake();
   ship = new Ship();
-  player = new Player(windowWidth, windowHeight);
   food = new Consumable();
+  ball = new Ball();
+  paddle = new Paddle();
+  bricks = new Brick();
 
   //creating the asteroids
   for (let i = 0; i<MAX_ASTEROIDS; i++) {
     asteroids.push(new Asteroid());
   }
 
+  bricks.createBricks();
+
   //button functions
   createGameButtons();
   createStartButton();
   createSnakeButton();
+  createBreakoutButton();
 }
 
 //super state function and rendering the background
 function draw() {
-  // if (superState === "asteroids" && asteroidsState === "asteroids") {
-  //   background(bg);
-  // }
-
-  // else {
-  //   background(220);
-  // }
   background(220);
   superStateStuff();
 }
@@ -63,19 +62,19 @@ function draw() {
 function createGameButtons() {
   asteroidsButton = createButton("Asteroids");
   snakeButton = createButton("Snake");
-  spaceInvadersButton = createButton("Space Invaders");
+  breakoutButton = createButton("Breakout");
 
   asteroidsButton.position(windowWidth/2-buttonSize/2, height/2-buttonSize/4);
   snakeButton.position(windowWidth/2-buttonSize/2, height/2);
-  spaceInvadersButton.position(windowWidth/2-buttonSize/2, height/2+buttonSize/4);
+  breakoutButton.position(windowWidth/2-buttonSize/2, height/2+buttonSize/4);
 
   asteroidsButton.mousePressed(startAsteroids);
   snakeButton.mousePressed(startSnake);
-  spaceInvadersButton.mousePressed(startSpaceInvaders);
+  breakoutButton.mousePressed(startBreakout);
 
   asteroidsButton.size(buttonSize, buttonSize/4);
   snakeButton.size(buttonSize, buttonSize/4);
-  spaceInvadersButton.size(buttonSize, buttonSize/4);
+  breakoutButton.size(buttonSize, buttonSize/4);
 }
 
 //fucntions for each game button to run when clicked
@@ -92,9 +91,10 @@ function startSnake() {
   snakeTitleMusic.loop();
 }
 
-function startSpaceInvaders() {
+function startBreakout() {
   buttonPressedSound.play();
-  superState = "spaceInvaders";
+  superState = "Breakout";
+  breakState = "start";
 }
 
 //state related and specific game functions
@@ -104,10 +104,10 @@ function superStateStuff() {
   if (superState === "start") {
     asteroidsButton.show();
     snakeButton.show();
-    //not showing the space invaders button do to extensive bugs and issues (game is a heavy WIP atm)
-    // spaceInvadersButton.show();
+    breakoutButton.show();
     asteroidsStartButton.hide();
     snakeGameButton.hide();
+    breakoutStartButton.hide();
   }
 
   //starting the asteroids game
@@ -120,18 +120,16 @@ function superStateStuff() {
     snakeStuff(snake);
   }
 
-  //starting space invaders
-  else if (superState === "spaceInvaders") {
-    player.displayPlayer();
-    laser.display();
-    laser.move();
+  //starting Breakout
+  else if (superState === "Breakout") {
+    breakoutStuff();
   }
 
   //hiding the game buttons when the state changes
   if (superState !== "start") {
     asteroidsButton.hide();
     snakeButton.hide();
-    spaceInvadersButton.hide();
+    breakoutButton.hide();
   }
 }
 
@@ -140,10 +138,6 @@ function mousePressed() {
   if (asteroidsState === "asteroids") {
     lasers.push(new Laser(ship.pos, ship.heading));
     pew.play();
-  }
-
-  else if (superState === "spaceInvaders") {
-    laser = new Projectile(player.location);
   }
 }
 
@@ -210,15 +204,8 @@ function keyPressed() {
   }
 
   //space invaders key binds
-  else if (superState === "spaceInvaders") {
-    if (keyIsDown(87)) {
-      player.move("up");
-    }
-    else if (keyIsDown(83)) {
-      player.move("down");
-    }
-    // if (keyIsDown(69)) {
-    // }
+  else if (superState === "Breakout") {
+    
   }
 }
 

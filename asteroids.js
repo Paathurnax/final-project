@@ -126,7 +126,7 @@ function asteroidStuff() {
       asteroidsState = "lose";
     }
 
-    //running the asteroid fucntions
+    //running the asteroid functions
     asteroids[i].render();
     asteroids[i].update();
     asteroids[i].edges();
