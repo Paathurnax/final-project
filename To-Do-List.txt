@@ -1,11 +1,15 @@
 #Things to do
 
-add win and lose music
+
 fix collsions in snake
-add a win and loss screen to breakout
+
 add score and live counter to breakout
 add known bugs file if needed
 comment code
 organize code where needed
 make ui look better
 add some more color to breakout if time
+
+done;
+add win and lose music
+add a win and loss screen to breakout
