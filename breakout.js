@@ -177,6 +177,7 @@ function createBreakoutButton() {
 }
 
 function startBreakoutGame() {
+  breakoutTitleMusic.stop();
   buttonPressedSound.play();
   breakState = "Start Game";
 }

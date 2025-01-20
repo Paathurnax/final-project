@@ -13,13 +13,18 @@ let buttonSize = 120;
 //loading the background for asteroids (not currently being used)
 function preload() {
   // bg = loadImage("space.gif");
-  pew = loadSound("laser_shooting_sfx.wav");
-  asteroidsTitleMusic = loadSound("Cyberpunk Moonlight Sonata.mp3");
-  snakeTitleMusic = loadSound("awesomeness.wav");
-  asteroidsBackgroundMusic = loadSound("asteroidsbg.ogg");
-  snakeBackgroundMusic = loadSound("calm.wav");
-  buttonPressedSound = loadSound("button.wav");
-  snakeEatingSound = loadSound("snakeEat.ogg");
+  pew = loadSound("assets/laser_shooting_sfx.wav");
+  asteroidsTitleMusic = loadSound("assets/asteroidsMain.mp3");
+  snakeTitleMusic = loadSound("assets/snakeMain.wav");
+  asteroidsBackgroundMusic = loadSound("assets/asteroidsbg.ogg");
+  snakeBackgroundMusic = loadSound("assets/snakebg.wav");
+  buttonPressedSound = loadSound("assets/button.wav");
+  snakeEatingSound = loadSound("assets/snakeEat.ogg");
+  breakoutTitleMusic = loadSound("assets/breakoutMain.mp3");
+  mainMenuMusic = loadSound("assets/MainMenu.mp3");
+  universalLoseMusic = loadSound("assets/YouLost.ogg");
+  universalWinMusic = loadSound("assets/YouWon.mp3");
+  breakoutBackgroundMusic = loadSound("assets/breakoutbg.ogg");
 }
 
 
@@ -95,13 +100,30 @@ function startBreakout() {
   buttonPressedSound.play();
   superState = "Breakout";
   breakState = "start";
+  breakoutTitleMusic.loop();
 }
 
 //state related and specific game functions
 function superStateStuff() {
 
-  //hiding and showing buttons when needed
   if (superState === "start") {
+    push();
+    textSize(100);
+    text("Click to Start", width/2 - textWidth("Click to Start")/2, height/2);
+    pop();
+    asteroidsButton.hide();
+    snakeButton.hide();
+    breakoutButton.hide();
+    asteroidsStartButton.hide();
+    snakeGameButton.hide();
+    breakoutStartButton.hide();
+  }
+
+  //hiding and showing buttons when needed
+  else if (superState === "Start Game") {
+    push();
+    textSize(100);
+    text("The Mini-Arcade", width/2 - textWidth("The Mini-Arcade")/2, height/3);
     asteroidsButton.show();
     snakeButton.show();
     breakoutButton.show();
@@ -126,10 +148,11 @@ function superStateStuff() {
   }
 
   //hiding the game buttons when the state changes
-  if (superState !== "start") {
+  if (superState !== "start" && superState !== "Start Game") {
     asteroidsButton.hide();
     snakeButton.hide();
     breakoutButton.hide();
+    mainMenuMusic.stop();
   }
 }
 
@@ -138,6 +161,11 @@ function mousePressed() {
   if (asteroidsState === "asteroids") {
     lasers.push(new Laser(ship.pos, ship.heading));
     pew.play();
+  }
+
+  if (superState === "start") {
+    mainMenuMusic.loop();
+    superState = "Start Game";
   }
 }
 
