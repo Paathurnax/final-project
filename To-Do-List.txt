@@ -1,9 +1,8 @@
 #Things to do
 
 
-fix collsions in snake
 
-add score and live counter to breakout
+
 add known bugs file if needed
 comment code
 organize code where needed
@@ -13,3 +12,5 @@ add some more color to breakout if time
 done;
 add win and lose music
 add a win and loss screen to breakout
+fixed snake oob issue
+add score and live counter to breakout

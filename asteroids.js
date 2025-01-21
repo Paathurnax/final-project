@@ -14,7 +14,7 @@ let lasers = [];
 let invulnurable = false;
 let answer;
 let score = 0;
-let asteroidsState = "start";
+let asteroidsState;
 let textOffset = 200;
 let asteroidsStartButton;
 let gameOver;

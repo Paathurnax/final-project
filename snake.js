@@ -213,7 +213,7 @@ function snakeStuff(playerName) {
       universalWinMusic.loop();
     }
     push();
-    text("You Win!", width/2, height/2);
+    text("You Win!", width/2-textWidth("You Win!")/2, height/2);
     textSize(100);
     pop();
     snakeGameButton.hide();

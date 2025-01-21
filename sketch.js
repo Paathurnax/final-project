@@ -86,6 +86,7 @@ function createGameButtons() {
 function startAsteroids() {
   buttonPressedSound.play();
   superState = "asteroids";
+  asteroidsState = "start";
   asteroidsTitleMusic.loop();
 }
 
@@ -164,6 +165,7 @@ function mousePressed() {
   }
 
   if (superState === "start") {
+    alert("all games use wasd controls and use click to shoot projectiles. When a game has been won or lost, press enter to return to menu");
     mainMenuMusic.loop();
     superState = "Start Game";
   }
@@ -171,6 +173,17 @@ function mousePressed() {
 
 //key detection for all 3 games
 function keyPressed() {
+
+  if (asteroidsState === "lose" || gameState === "LOSE" || breakState === "lose" || asteroidsState === "win" || gameState === "WIN" || breakState === "win") {
+    if (keyIsDown(13)) {
+      universalLoseMusic.stop();
+      universalWinMusic.stop();
+      superState = "Start Game";
+      asteroidsState = "none";
+      gameState = "none";
+      breakState = "none";
+    }
+  }
 
   //for asteroids
   if (asteroidsState === "asteroids") {
@@ -214,19 +227,19 @@ function keyPressed() {
   else if (superState === "snake") {
 
     //changing the movement direction of the snake
-    if (keyIsDown(87) && snake.direction !== "down") {
+    if (keyIsDown(87) && snake.direction !== "down" && snake.bodyArray[0].x < width && snake.bodyArray[0].x > 0 && snake.bodyArray[0].y > 0 && snake.bodyArray[0].y < height) {
       snake.direction = "up";
     }
   
-    else if (keyIsDown(65) && snake.direction !== "right") {
+    else if (keyIsDown(65) && snake.direction !== "right" && snake.bodyArray[0].x < width && snake.bodyArray[0].x > 0 && snake.bodyArray[0].y > 0 && snake.bodyArray[0].y < height) {
       snake.direction = "left";    
     }
   
-    else if (keyIsDown(68) && snake.direction !== "left") {
+    else if (keyIsDown(68) && snake.direction !== "left" && snake.bodyArray[0].x < width && snake.bodyArray[0].x > 0 && snake.bodyArray[0].y > 0 && snake.bodyArray[0].y < height) {
       snake.direction = "right";    
     }
   
-    else if (keyIsDown(83) && snake.direction !== "up") {
+    else if (keyIsDown(83) && snake.direction !== "up" && snake.bodyArray[0].x < width && snake.bodyArray[0].x > 0 && snake.bodyArray[0].y > 0 && snake.bodyArray[0].y < height) {
       snake.direction = "down";    
     }
   }

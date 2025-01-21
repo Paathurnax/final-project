@@ -84,14 +84,14 @@ class Ball {
 
 class Paddle {
   constructor() {
-    this.size = 100;
+    this.size = 150;
     this.position = createVector(width/2, height-this.size/2);
     this.speed = 10;
   }
 
   display() {
     rectMode(CENTER);
-    rect(this.position.x, this.position.y, this.size, this.size/4);
+    rect(this.position.x, this.position.y, this.size, this.size/6);
   }
 
   move(direction) {
@@ -165,6 +165,10 @@ function breakoutStuff() {
     paddle.display();
     bricks.displayBricks();
     bricks.collision();
+    push();
+    textSize(25);
+    text("lives: " + lives, width-100, height/2);
+    pop();
     if (keyIsDown(65)) {
       paddle.move("left");
     }
@@ -174,6 +178,7 @@ function breakoutStuff() {
   }
 
   else if (breakState === "lose") {
+    breakoutBackgroundMusic.stop();
     if (!universalLoseMusic.isPlaying()) {
       universalLoseMusic.loop();
     }
@@ -184,6 +189,7 @@ function breakoutStuff() {
   }
 
   else if (breakState === "win") {
+    breakoutBackgroundMusic.stop();
     if (!universalWinMusic.isPlaying()) {
       universalWinMusic.loop();
     }
@@ -205,4 +211,5 @@ function startBreakoutGame() {
   breakoutTitleMusic.stop();
   buttonPressedSound.play();
   breakState = "Start Game";
+  breakoutBackgroundMusic.loop();
 }
