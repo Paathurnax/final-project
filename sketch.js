@@ -165,7 +165,7 @@ function mousePressed() {
   }
 
   if (superState === "start") {
-    alert("all games use wasd controls and use click to shoot projectiles. When a game has been won or lost, press enter to return to menu");
+    alert("all games use wasd controls and use click to shoot projectiles");
     mainMenuMusic.loop();
     superState = "Start Game";
   }
@@ -173,18 +173,6 @@ function mousePressed() {
 
 //key detection for all 3 games
 function keyPressed() {
-
-  if (asteroidsState === "lose" || gameState === "LOSE" || breakState === "lose" || asteroidsState === "win" || gameState === "WIN" || breakState === "win") {
-    if (keyIsDown(13)) {
-      universalLoseMusic.stop();
-      universalWinMusic.stop();
-      superState = "Start Game";
-      asteroidsState = "none";
-      gameState = "none";
-      breakState = "none";
-      lives = 3;
-    }
-  }
 
   //for asteroids
   if (asteroidsState === "asteroids") {
@@ -243,11 +231,6 @@ function keyPressed() {
     else if (keyIsDown(83) && snake.direction !== "up" && snake.bodyArray[0].x < width && snake.bodyArray[0].x > 0 && snake.bodyArray[0].y > 0 && snake.bodyArray[0].y < height) {
       snake.direction = "down";    
     }
-  }
-
-  //space invaders key binds
-  else if (superState === "Breakout") {
-    
   }
 }
 

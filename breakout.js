@@ -1,24 +1,31 @@
 // Breakout
 
+//intializing variables
 let breakState;
 let lives = 3;
 
+
+//class for the ball
 class Ball {
   constructor() {
+    //pos, vel, speed, and radius variables
     this.position = createVector(width/2, height/2);
     this.speed = 5;
     this.velocity = createVector(this.speed, -this.speed);
     this.radius = 10;
   }
 
+  //displaying the ball
   display() {
     circle(this.position.x, this.position.y, this.radius*2);
   }
 
+  //moving the ball
   move() {
     this.position.add(this.velocity);
   }
 
+  //bouncing off the paddle
   bounce(paddle) {
     if (this.position.x>= width - this.radius || this.position.x<=this.radius) {
       this.velocity.x *= -1;
@@ -31,6 +38,7 @@ class Ball {
     }    
   }
 
+  //subtracting lives when the paddle misses the ball and resting position and velocity
   loseLife() {
     if (this.position.y > height-this.radius) {
       lives--;
@@ -39,11 +47,13 @@ class Ball {
       this.velocity.set(this.speed, -this.speed);
     }
 
+    //you lost womp womp
     if (lives <= 0) {
       breakState = "lose";
     }
   }
-
+  
+  //brick collsion
   collideWith(brick) {
     if (this.position.x + this.radius < brick.x + brick.h - brick.w / 2) {
       return false;
@@ -62,6 +72,7 @@ class Ball {
     }
   }
 
+  //bouncing off the bricks
   bounceOff(brick) {
     this.velocity.x*= -1;
     this.move();
@@ -75,13 +86,14 @@ class Ball {
     this.position.sub(previousVelocity);
   }
 
+  //runnign the functions
   runFunctions() {
     this.display();
     this.move();
     this.loseLife();
   }
 }
-
+//class for the paddle
 class Paddle {
   constructor() {
     this.size = 150;
@@ -89,11 +101,13 @@ class Paddle {
     this.speed = 10;
   }
 
+  //displaying the paddle
   display() {
     rectMode(CENTER);
     rect(this.position.x, this.position.y, this.size, this.size/6);
   }
 
+  //moving the paddle
   move(direction) {
     if (direction === "right" && this.position.x + this.size/2 < width) {
       this.position.x += this.speed;
@@ -105,6 +119,7 @@ class Paddle {
   }
 }
 
+//class for the bricks
 class Brick {
   constructor() {
     this.brickArray = [];
@@ -113,6 +128,7 @@ class Brick {
     this.brickSize = width/this.MAX_BRICKS;
   }
 
+  //creating the brick array
   createBricks() {
     for (let i = 0; i < this.MAX_BRICKS; i++) {
       for (let j = 0; j < this.ROWS; j++) {
@@ -121,12 +137,14 @@ class Brick {
     }
   }
 
+  //displaying the brick
   displayBricks() {
     for (let brick of this.brickArray) {
       rect(brick.x+brick.h, brick.y, brick.w, brick.h);
     }
   }
 
+  //ball collision
   collision() {
     let hitBrick = false;
     for (let i = this.brickArray.length-1; i>=0; i--) {
@@ -141,6 +159,7 @@ class Brick {
     }
   }
 
+  //you won good job
   win() {
     if (this.brickArray.length <=0) {
       breakState = "win";
@@ -148,6 +167,7 @@ class Brick {
   }
 }
 
+//start function and and other states
 function breakoutStuff() {
   if (breakState === "start") {
     background("purple");
@@ -200,6 +220,8 @@ function breakoutStuff() {
   }
 }
 
+
+//creating the start
 function createBreakoutButton() {
   breakoutStartButton = createButton("Start Game");
   breakoutStartButton.size(buttonSize, buttonSize/4);
@@ -207,6 +229,7 @@ function createBreakoutButton() {
   breakoutStartButton.mousePressed(startBreakoutGame);
 }
 
+//function for the button to run when it is pressed
 function startBreakoutGame() {
   breakoutTitleMusic.stop();
   buttonPressedSound.play();
