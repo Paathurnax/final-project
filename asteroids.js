@@ -50,19 +50,19 @@ function stateStuff() {
   }
 
   //you lost
-  if (asteroidsState === "lose") {
+  else if (asteroidsState === "lose") {
     if (!universalLoseMusic.isPlaying()) {
       universalLoseMusic.loop();
     }
     push();
-    text("you lose!", width/2-textWidth("you lose!")/2, height/2);
     textSize(100);
+    text("you lose!", width/2-textWidth("you lose!")/2, height/2);
     pop();
     asteroidsBackgroundMusic.stop();
   }
 
   //you won
-  if (asteroidsState === "win") {
+  else if (asteroidsState === "win") {
     if (!universalWinMusic.isPlaying()) {
       universalWinMusic.loop();
     }

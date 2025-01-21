@@ -182,6 +182,7 @@ function keyPressed() {
       asteroidsState = "none";
       gameState = "none";
       breakState = "none";
+      lives = 3;
     }
   }
 
