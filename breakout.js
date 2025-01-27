@@ -97,8 +97,8 @@ class Ball {
 class Paddle {
   constructor() {
     this.size = 150;
-    this.position = createVector(width/2, height-this.size/2);
-    this.speed = 10;
+    this.position = createVector(width/2, height);
+    this.speed = 5;
   }
 
   //displaying the paddle
@@ -161,7 +161,7 @@ class Brick {
 
   //you won good job
   win() {
-    if (this.brickArray.length <=0) {
+    if (this.brickArray.length-1 <= 0) {
       breakState = "win";
     }
   }

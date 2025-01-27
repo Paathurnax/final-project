@@ -35,6 +35,7 @@ function setup() {
   let canvasX = (windowWidth-width)/2;
   let canvasY = (windowHeight-height)/2;
   cnv.position(canvasX, canvasY);
+  controllerStuff();
   
   snake = new Snake();
   ship = new Ship();
@@ -99,7 +100,7 @@ function startSnake() {
 
 function startBreakout() {
   buttonPressedSound.play();
-  superState = "Breakout";
+  superState = "breakout";
   breakState = "start";
   breakoutTitleMusic.loop();
 }
@@ -109,8 +110,8 @@ function superStateStuff() {
 
   if (superState === "start") {
     push();
-    textSize(100);
-    text("Click to Start", width/2 - textWidth("Click to Start")/2, height/2);
+    textSize(50);
+    text("Click to Start/Press A to Start", width/2 - textWidth("Click to Start/Press A to Start")/2, height/2);
     pop();
     asteroidsButton.hide();
     snakeButton.hide();
@@ -144,7 +145,7 @@ function superStateStuff() {
   }
 
   //starting Breakout
-  else if (superState === "Breakout") {
+  else if (superState === "breakout") {
     breakoutStuff();
   }
 
@@ -194,40 +195,25 @@ function keyPressed() {
     //this is a secret lol
     else if(keyIsDown(192)) {
       answer = prompt("command console");
-      if (answer === "IDDQD") {
-        invulnurable = true;
-      }
-      else if (answer === "AUTOWIN") {
-        asteroidsState = "win";
-      }
-      else if (answer === "AUTOLOSE") {
-        asteroidsState = "lose";
-      }
-      else if (answer === "MAIN MENU") {
-        asteroidsState = "start";
-      }
-      else {
-        alert("Not A CheatCode");
-      }
+      asteroidsCheatMenu(answer);
     }
   }
 
   //snake keybinds
   else if (superState === "snake") {
-
     //changing the movement direction of the snake
     if (keyIsDown(87) && snake.direction !== "down" && snake.bodyArray[0].x < width && snake.bodyArray[0].x > 0 && snake.bodyArray[0].y > 0 && snake.bodyArray[0].y < height) {
       snake.direction = "up";
     }
-  
+
     else if (keyIsDown(65) && snake.direction !== "right" && snake.bodyArray[0].x < width && snake.bodyArray[0].x > 0 && snake.bodyArray[0].y > 0 && snake.bodyArray[0].y < height) {
       snake.direction = "left";    
     }
-  
+
     else if (keyIsDown(68) && snake.direction !== "left" && snake.bodyArray[0].x < width && snake.bodyArray[0].x > 0 && snake.bodyArray[0].y > 0 && snake.bodyArray[0].y < height) {
       snake.direction = "right";    
     }
-  
+
     else if (keyIsDown(83) && snake.direction !== "up" && snake.bodyArray[0].x < width && snake.bodyArray[0].x > 0 && snake.bodyArray[0].y > 0 && snake.bodyArray[0].y < height) {
       snake.direction = "down";    
     }
@@ -240,6 +226,133 @@ function keyReleased() {
   //stops accelerating the ship when the key is no longer being pressed and stops ship rotation
   if (asteroidsState === "asteroids") {
     ship.setRotation(0);
+    ship.boosting = false;
+  }
+}
+
+function asteroidsCheatMenu(answer) {
+  if (answer === "IDDQD") {
+    invulnurable = true;
+  }
+  else if (answer === "AUTOWIN") {
+    asteroidsState = "win";
+  }
+  else if (answer === "AUTOLOSE") {
+    asteroidsState = "lose";
+  }
+  else if (answer === "MAIN MENU") {
+    asteroidsState = "start";
+  }
+  else {
+    alert("Not A CheatCode");
+  }
+}
+
+function controllerStuff() {
+  if (Controller && Controller.supported) {
+    Controller.search();
+  }
+  window.addEventListener('gc.analog.hold', function (event) {
+    let analog = event.detail;
+    gameAnalog(analog);
+  }, false);
+
+  window.addEventListener('gc.analog.change', function (event) {
+    let thing = event.detail;
+    analogChange(thing);
+  }, false);
+
+  window.addEventListener('gc.button.press', function (event) {
+    let button = event.detail;
+    gameButton(button);
+  }, false);
+
+  window.addEventListener('gc.button.release', function (event) {
+    let button = event.detail;
+    buttonRelease(button);
+  }, false);
+}
+
+function gameAnalog(analog) {
+  if (superState === "snake" && gameState === "Start Game") {
+    if (analog.name === "LEFT_ANALOG_STICK") {
+      if (analog.position.x > 0.5 && snake.direction !== "left" && snake.bodyArray[0].x < width && snake.bodyArray[0].x > 0 && snake.bodyArray[0].y > 0 && snake.bodyArray[0].y < height) {
+        snake.direction = "right";
+      }
+
+      else if (analog.position.x < -0.5 && snake.direction !== "right" && snake.bodyArray[0].x < width && snake.bodyArray[0].x > 0 && snake.bodyArray[0].y > 0 && snake.bodyArray[0].y < height) {
+        snake.direction = "left";
+      }
+
+      else if (analog.position.y < -0.5 && snake.direction !== "down" && snake.bodyArray[0].x < width && snake.bodyArray[0].x > 0 && snake.bodyArray[0].y > 0 && snake.bodyArray[0].y < height) {
+        snake.direction = "up";
+      }
+
+      else if (analog.position.y > 0.5 && snake.direction !== "up" && snake.bodyArray[0].x < width && snake.bodyArray[0].x > 0 && snake.bodyArray[0].y > 0 && snake.bodyArray[0].y < height) {
+        snake.direction = "down";
+      }
+    }
+  }
+
+  if (superState === "asteroids" && asteroidsState === "asteroids") {
+    if (analog.name === "LEFT_ANALOG_STICK") {
+      if (analog.position.x > 0.5) {
+        ship.setRotation(0.1);
+      }
+
+      else if (analog.position.x < -0.5) {
+        ship.setRotation(-0.1);
+      }
+    }
+  }
+
+  if (superState === "breakout" && breakState === "Start Game") {
+    if (analog.name === "LEFT_ANALOG_STICK") {
+      if (analog.position.x > 0.5) {
+        paddle.move("right");      
+      }
+      else if (analog.position.x < -0.5) {
+        paddle.move("left");
+      }
+    }
+  }
+}
+
+function gameButton(button) {
+  if (superState === "asteroids" && asteroidsState === "asteroids") {
+    if (button.name === "FACE_1") {
+      ship.boosting = true;
+      ship.boost();
+    }
+
+    else if (button.name === "RIGHT_SHOULDER_BOTTOM") {
+      lasers.push(new Laser(ship.pos, ship.heading));
+      pew.play();
+    }
+
+    else if (button.name === "START") {
+      answer = prompt("command console");
+      asteroidsCheatMenu(answer);
+    }
+  }
+
+  if (superState === "start") {
+    if (button.name === "FACE_1") {
+      alert("all games use wasd controls and use click to shoot projectiles. Also, all games now use controlller inputs except for start buttons");
+      mainMenuMusic.loop();
+      superState = "Start Game";
+    }
+  }
+}
+
+function analogChange() {
+  if (superState === "asteroids") {
+    ship.setRotation(0);
+  }
+}
+
+function buttonRelease() {
+  if (superState === "asteroids") {
     ship.boosting = false;
   }
 }
