@@ -43,6 +43,9 @@ function setup() {
   ball = new Ball();
   paddle = new Paddle();
   bricks = new Brick();
+  player1 = new Player1();
+  player2 = new Player2();
+  pongBall = new PongBall();
 
   //creating the asteroids
   for (let i = 0; i<MAX_ASTEROIDS; i++) {
@@ -56,6 +59,7 @@ function setup() {
   createStartButton();
   createSnakeButton();
   createBreakoutButton();
+  createPongButton();
 }
 
 //super state function and rendering the background
@@ -69,18 +73,22 @@ function createGameButtons() {
   asteroidsButton = createButton("Asteroids");
   snakeButton = createButton("Snake");
   breakoutButton = createButton("Breakout");
+  pongButton = createButton("Pong");
 
   asteroidsButton.position(windowWidth/2-buttonSize/2, height/2-buttonSize/4);
   snakeButton.position(windowWidth/2-buttonSize/2, height/2);
   breakoutButton.position(windowWidth/2-buttonSize/2, height/2+buttonSize/4);
+  pongButton.position(windowWidth/2-buttonSize/2, height/2+buttonSize/2);
 
   asteroidsButton.mousePressed(startAsteroids);
   snakeButton.mousePressed(startSnake);
   breakoutButton.mousePressed(startBreakout);
+  pongButton.mousePressed(startPong);
 
   asteroidsButton.size(buttonSize, buttonSize/4);
   snakeButton.size(buttonSize, buttonSize/4);
   breakoutButton.size(buttonSize, buttonSize/4);
+  pongButton.size(buttonSize, buttonSize/4);
 }
 
 //fucntions for each game button to run when clicked
@@ -105,6 +113,12 @@ function startBreakout() {
   breakoutTitleMusic.loop();
 }
 
+function startPong() {
+  buttonPressedSound.play();
+  superState = "pong";
+  pongState = "start";
+}
+
 //state related and specific game functions
 function superStateStuff() {
 
@@ -116,9 +130,11 @@ function superStateStuff() {
     asteroidsButton.hide();
     snakeButton.hide();
     breakoutButton.hide();
+    pongButton.hide();
     asteroidsStartButton.hide();
     snakeGameButton.hide();
     breakoutStartButton.hide();
+    pongGameButton.hide();
   }
 
   //hiding and showing buttons when needed
@@ -129,9 +145,11 @@ function superStateStuff() {
     asteroidsButton.show();
     snakeButton.show();
     breakoutButton.show();
+    pongButton.show();
     asteroidsStartButton.hide();
     snakeGameButton.hide();
     breakoutStartButton.hide();
+    pongGameButton.hide();
   }
 
   //starting the asteroids game
@@ -149,11 +167,16 @@ function superStateStuff() {
     breakoutStuff();
   }
 
+  else if (superState === "pong") {
+    pongStuff();
+  }
+
   //hiding the game buttons when the state changes
   if (superState !== "start" && superState !== "Start Game") {
     asteroidsButton.hide();
     snakeButton.hide();
     breakoutButton.hide();
+    pongButton.hide();
     mainMenuMusic.stop();
   }
 }
@@ -313,6 +336,28 @@ function gameAnalog(analog) {
       }
       else if (analog.position.x < -0.5) {
         paddle.move("left");
+      }
+    }
+  }
+
+  if (superState === "pong" && pongState === "game") {
+    if (analog.position.y < -0.5) {
+      if (analog.name === "LEFT_ANALOG_STICK") {
+        player1.move("up");
+      }
+
+      else if (analog.name === "RIGHT_ANALOG_STICK") {
+        player2.move("up");
+      }
+    }
+
+    if (analog.position.y > 0.5) {
+      if (analog.name === "LEFT_ANALOG_STICK") {
+        player1.move("down");
+      }
+
+      else if (analog.name === "RIGHT_ANALOG_STICK") {
+        player2.move("down");
       }
     }
   }
