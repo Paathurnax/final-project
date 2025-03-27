@@ -46,6 +46,8 @@ function setup() {
   player1 = new Player1();
   player2 = new Player2();
   pongBall = new PongBall();
+  dinosaur = new Dino();
+  obstacle = new Obstacle();
 
   //creating the asteroids
   for (let i = 0; i<MAX_ASTEROIDS; i++) {
@@ -60,6 +62,7 @@ function setup() {
   createSnakeButton();
   createBreakoutButton();
   createPongButton();
+  createDinoButton();
 }
 
 //super state function and rendering the background
@@ -74,21 +77,25 @@ function createGameButtons() {
   snakeButton = createButton("Snake");
   breakoutButton = createButton("Breakout");
   pongButton = createButton("Pong");
+  dinoButton = createButton("Dinosaur Game");
 
   asteroidsButton.position(windowWidth/2-buttonSize/2, height/2-buttonSize/4);
   snakeButton.position(windowWidth/2-buttonSize/2, height/2);
   breakoutButton.position(windowWidth/2-buttonSize/2, height/2+buttonSize/4);
   pongButton.position(windowWidth/2-buttonSize/2, height/2+buttonSize/2);
+  dinoButton.position(windowWidth/2-buttonSize/2, height/2+buttonSize);
 
   asteroidsButton.mousePressed(startAsteroids);
   snakeButton.mousePressed(startSnake);
   breakoutButton.mousePressed(startBreakout);
   pongButton.mousePressed(startPong);
+  dinoButton.mousePressed(startDino);
 
   asteroidsButton.size(buttonSize, buttonSize/4);
   snakeButton.size(buttonSize, buttonSize/4);
   breakoutButton.size(buttonSize, buttonSize/4);
   pongButton.size(buttonSize, buttonSize/4);
+  dinoButton.size(buttonSize, buttonSize/4);
 }
 
 //fucntions for each game button to run when clicked
@@ -119,6 +126,12 @@ function startPong() {
   pongState = "start";
 }
 
+function startDino() {
+  buttonPressedSound.play();
+  superState = "dino";
+  dinoState = "start";
+}
+
 //state related and specific game functions
 function superStateStuff() {
 
@@ -131,10 +144,12 @@ function superStateStuff() {
     snakeButton.hide();
     breakoutButton.hide();
     pongButton.hide();
+    dinoButton.hide();
     asteroidsStartButton.hide();
     snakeGameButton.hide();
     breakoutStartButton.hide();
     pongGameButton.hide();
+    dinoGameButton.hide();
   }
 
   //hiding and showing buttons when needed
@@ -146,10 +161,12 @@ function superStateStuff() {
     snakeButton.show();
     breakoutButton.show();
     pongButton.show();
+    dinoButton.show();
     asteroidsStartButton.hide();
     snakeGameButton.hide();
     breakoutStartButton.hide();
     pongGameButton.hide();
+    dinoGameButton.hide();
   }
 
   //starting the asteroids game
@@ -170,6 +187,10 @@ function superStateStuff() {
   else if (superState === "pong") {
     pongStuff();
   }
+  
+  else if (superState === "dino") {
+    dinoStuff();
+  }
 
   //hiding the game buttons when the state changes
   if (superState !== "start" && superState !== "Start Game") {
@@ -177,6 +198,7 @@ function superStateStuff() {
     snakeButton.hide();
     breakoutButton.hide();
     pongButton.hide();
+    dinoButton.hide();
     mainMenuMusic.stop();
   }
 }
